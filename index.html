@@ -1,0 +1,1276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<meta name="theme-color" content="#080a0d" />
+<meta name="description" content="Liquid-glass trip dashboard for seven days at Glacier National Park — day maps, plans, decisions, and an editable carry-on packing list." />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Glacier Passport" />
+<title>Glacier Anniversary Passport</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" />
+
+<style>
+  :root {
+    --bg-0: #080a0d;
+    --bg-1: #14181f;
+
+    --panel: rgba(22, 27, 35, 0.60);
+    --panel-2: rgba(30, 36, 46, 0.72);
+    --panel-solid: rgba(18, 22, 29, 0.94);
+    --edge: rgba(255, 255, 255, 0.15);
+    --edge-hi: rgba(255, 255, 255, 0.30);
+
+    --ink: #f4f7fb;
+    --ink-2: rgba(244, 247, 251, 0.64);
+    --ink-3: rgba(244, 247, 251, 0.40);
+
+    --rose: #ff5f7a;
+    --rose-2: #ff93a4;
+    --teal: #57c6d6;
+    --teal-2: #93dfe9;
+    --gold: #e7b45c;
+    --good: #5fd39b;
+
+    --blur: blur(24px) saturate(1.7);
+    --radius: 24px;
+    --shadow: 0 24px 64px -18px rgba(0, 0, 0, 0.62), inset 0 1px 0 0 var(--edge-hi);
+
+    --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+      "Figtree", system-ui, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", "IBM Plex Mono", Menlo, monospace;
+
+    --fs-xs: 0.72rem;
+    --fs-sm: 0.86rem;
+    --fs-base: 1rem;
+    --fs-md: 1.2rem;
+    --fs-lg: clamp(1.5rem, 3.4vw, 2rem);
+    --fs-xl: clamp(2.1rem, 6.5vw, 3.4rem);
+    --fs-hero: clamp(2.6rem, 9vw, 4.6rem);
+
+    --measure: 64ch;
+    --page: 1000px;
+  }
+
+  * { box-sizing: border-box; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 92px;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; animation: none !important; }
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg-0);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: var(--fs-base);
+    line-height: 1.6;
+    letter-spacing: 0.005em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(62% 48% at 80% 8%, rgba(255, 95, 122, 0.24), transparent 68%),
+      radial-gradient(58% 46% at 6% 92%, rgba(87, 198, 214, 0.17), transparent 70%),
+      radial-gradient(90% 60% at 50% 120%, rgba(231, 180, 92, 0.08), transparent 70%),
+      linear-gradient(162deg, var(--bg-0) 0%, var(--bg-1) 54%, #0a0c11 100%);
+  }
+
+  .wrap {
+    max-width: var(--page);
+    margin: 0 auto;
+    padding: 0 clamp(1rem, 4vw, 2.2rem) 5rem;
+  }
+
+  h1, h2, h3, h4 { margin: 0; line-height: 1.1; font-weight: 700; text-wrap: balance; }
+  p { margin: 0; }
+  a { color: var(--teal-2); text-underline-offset: 3px; text-decoration-color: rgba(147, 223, 233, 0.4); }
+  a:hover { color: #fff; }
+  ul { margin: 0; padding: 0; list-style: none; }
+
+  :focus-visible { outline: 2px solid var(--teal-2); outline-offset: 3px; border-radius: 6px; }
+
+  .grad {
+    background: linear-gradient(102deg, #ffffff 0%, #e2e8f1 38%, var(--rose-2) 92%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .glass {
+    background: var(--panel);
+    -webkit-backdrop-filter: var(--blur);
+    backdrop-filter: var(--blur);
+    border: 1px solid var(--edge);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  /* ---------------- nav ---------------- */
+  .nav-shell {
+    position: sticky;
+    top: 12px;
+    z-index: 60;
+    display: flex;
+    justify-content: center;
+    padding: 12px 0 4px;
+    pointer-events: none;
+  }
+  .nav {
+    pointer-events: auto;
+    display: flex;
+    gap: 0.15rem;
+    padding: 0.32rem;
+    border-radius: 999px;
+    background: rgba(18, 22, 29, 0.72);
+    -webkit-backdrop-filter: blur(26px) saturate(1.8);
+    backdrop-filter: blur(26px) saturate(1.8);
+    border: 1px solid var(--edge);
+    box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.7), inset 0 1px 0 0 var(--edge-hi);
+    max-width: calc(100vw - 2rem);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a {
+    flex: none;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--ink-2);
+    text-decoration: none;
+    padding: 0.5rem 0.95rem;
+    border-radius: 999px;
+    white-space: nowrap;
+    transition: color 0.18s, background 0.18s;
+  }
+  .nav a:hover { color: var(--ink); }
+  .nav a.on {
+    color: #fff;
+    background: linear-gradient(150deg, rgba(255, 95, 122, 0.9), rgba(255, 147, 164, 0.55));
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
+  }
+
+  section { margin-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 92px; }
+
+  .sec-head { margin-bottom: 1.5rem; }
+  .sec-head h2 { font-size: var(--fs-lg); letter-spacing: -0.02em; }
+  .sec-head p { margin-top: 0.5rem; color: var(--ink-2); font-size: var(--fs-sm); max-width: 46ch; }
+
+  /* ---------------- passport header ---------------- */
+  .passport {
+    position: relative;
+    margin-top: 1.2rem;
+    padding: clamp(1.6rem, 4vw, 2.6rem);
+    overflow: hidden;
+  }
+  .passport::after {
+    content: "";
+    position: absolute;
+    right: -60px; top: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 95, 122, 0.28), transparent 68%);
+    pointer-events: none;
+  }
+  .passport .eyebrow { position: relative; }
+  .passport h1 {
+    position: relative;
+    font-size: var(--fs-hero);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    margin: 0.5rem 0 0.1rem;
+  }
+  .passport .sub {
+    position: relative;
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    max-width: 44ch;
+    margin-top: 0.7rem;
+  }
+  .boarding {
+    position: relative;
+    margin-top: 1.8rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+    gap: 1px;
+    background: var(--edge);
+    border: 1px solid var(--edge);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .bd {
+    background: rgba(12, 15, 20, 0.55);
+    padding: 0.8rem 0.95rem 0.9rem;
+  }
+  .bd dt {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 0.3rem;
+  }
+  .bd dd {
+    margin: 0;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .bd dd span { display: block; font-weight: 400; color: var(--ink-2); font-size: var(--fs-xs); margin-top: 0.1rem; }
+
+  /* ---------------- day cards ---------------- */
+  .range-key {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    color: var(--ink-3);
+    margin-bottom: 1.4rem;
+  }
+  .range-key b { color: var(--ink-2); font-weight: 500; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.4rem; vertical-align: middle; }
+  .dot.home { background: var(--ink-3); }
+  .dot.mid { background: var(--teal); }
+  .dot.far { background: var(--rose); }
+
+  .days { display: grid; gap: 1.1rem; }
+
+  .day { padding: clamp(1.2rem, 3vw, 1.7rem); }
+  .day-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.2rem;
+  }
+  .day-date {
+    font-family: var(--mono);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .day-date b { color: var(--ink); letter-spacing: 0.18em; margin-right: 0.5rem; }
+  .day h3 { font-size: var(--fs-md); letter-spacing: -0.015em; flex: 1 1 auto; min-width: 0; }
+  .range-chip {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.28rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid var(--edge);
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+  .day[data-range="mid"] .range-chip { color: var(--teal-2); border-color: rgba(87, 198, 214, 0.4); }
+  .day[data-range="far"] .range-chip { color: var(--rose-2); border-color: rgba(255, 95, 122, 0.42); }
+
+  .day-sun {
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 0.9rem;
+  }
+  .day-note { font-size: var(--fs-sm); color: var(--ink-2); max-width: var(--measure); }
+  .day-note b { color: var(--ink); font-weight: 600; }
+
+  .day-grid {
+    margin-top: 1.1rem;
+    display: grid;
+    grid-template-columns: minmax(0, 300px) 1fr;
+    gap: 1.2rem;
+  }
+  @media (max-width: 680px) { .day-grid { grid-template-columns: 1fr; } }
+
+  .daymap {
+    width: 100%;
+    aspect-ratio: 800 / 560;
+    border-radius: 16px;
+    border: 1px solid var(--edge);
+    background: rgba(9, 12, 17, 0.55);
+    display: block;
+  }
+  .daymap text { font-family: var(--mono); }
+
+  .stoplist { display: grid; gap: 0.55rem; align-content: start; }
+  .stop {
+    display: grid;
+    grid-template-columns: 1.55rem 1fr;
+    gap: 0.6rem;
+    align-items: baseline;
+    font-size: var(--fs-sm);
+  }
+  .stop .pin {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(150deg, var(--rose), #d63d5c);
+    border-radius: 999px;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: grid;
+    place-content: center;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+  .stop.opt .pin {
+    background: transparent;
+    border: 1px solid rgba(255, 147, 164, 0.6);
+    color: var(--rose-2);
+    box-shadow: none;
+  }
+  .stop b { font-weight: 600; }
+  .stop .s { color: var(--ink-3); font-family: var(--mono); font-size: var(--fs-xs); }
+  .stop.opt { color: var(--ink-2); }
+
+  .day-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.1rem;
+    align-items: center;
+  }
+  .gmaps-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    text-decoration: none;
+    color: #fff;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    background: linear-gradient(150deg, rgba(87, 198, 214, 0.95), rgba(87, 198, 214, 0.5));
+    border: 1px solid rgba(147, 223, 233, 0.5);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+  .gmaps-btn:hover { color: #fff; filter: brightness(1.08); }
+  .gmaps-btn svg { width: 15px; height: 15px; }
+
+  .carry {
+    margin-top: 1.1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--edge);
+  }
+  .carry .lbl {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 0.55rem;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .chip {
+    font-size: var(--fs-xs);
+    color: var(--ink-2);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--edge);
+    border-radius: 999px;
+    padding: 0.28rem 0.62rem;
+  }
+  .chip.hot { color: var(--gold); border-color: rgba(231, 180, 92, 0.4); }
+
+  .day-foot {
+    margin-top: 1rem;
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------------- decision flags ---------------- */
+  .flags { display: grid; gap: 1.1rem; }
+  .flag { padding: clamp(1.2rem, 3vw, 1.6rem); border-left: 3px solid var(--gold); }
+  .flag-top { display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 0.6rem; }
+  .flag-tag {
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+  }
+  .flag h3 { font-size: var(--fs-md); flex: 1 1 auto; }
+  .flag .decide {
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    color: var(--ink);
+    background: rgba(231, 180, 92, 0.12);
+    border: 1px solid rgba(231, 180, 92, 0.35);
+    border-radius: 999px;
+    padding: 0.24rem 0.62rem;
+    white-space: nowrap;
+  }
+  .flag p { font-size: var(--fs-sm); color: var(--ink-2); max-width: var(--measure); }
+  .flag p + p { margin-top: 0.55rem; }
+  .flag p b { color: var(--ink); font-weight: 600; }
+  .flag .bails { margin-top: 0.8rem; display: grid; gap: 0.4rem; }
+  .flag .bails li { font-size: var(--fs-sm); color: var(--ink-2); padding-left: 1.1rem; position: relative; }
+  .flag .bails li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0.6em;
+    width: 6px; height: 6px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+  }
+  .flag .bails b { color: var(--ink); }
+
+  /* ---------------- packing ---------------- */
+  .pack-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.3rem;
+    padding: 0.9rem 1.1rem;
+  }
+  .pack-bar .meter {
+    flex: 1 1 180px;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    min-width: 120px;
+  }
+  .pack-bar .meter i {
+    display: block;
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--teal), var(--good));
+    transition: width 0.3s ease;
+  }
+  .pack-bar .pct {
+    font-family: var(--mono);
+    font-size: var(--fs-sm);
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .pack-bar button {
+    font: inherit;
+    font-size: var(--fs-xs);
+    font-family: var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--edge);
+    border-radius: 999px;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+  }
+  .pack-bar button:hover { color: var(--ink); border-color: var(--rose); }
+
+  .pack-gotcha {
+    padding: 1.1rem 1.3rem;
+    border-left: 3px solid var(--gold);
+    margin-bottom: 1.4rem;
+  }
+  .pack-gotcha h4 { font-size: var(--fs-sm); color: var(--gold); font-family: var(--mono); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .pack-gotcha ul { display: grid; gap: 0.4rem; }
+  .pack-gotcha li { font-size: var(--fs-sm); color: var(--ink-2); padding-left: 1.1rem; position: relative; }
+  .pack-gotcha li::before { content: "!"; position: absolute; left: 0; color: var(--gold); font-weight: 700; font-family: var(--mono); }
+  .pack-gotcha li b { color: var(--ink); }
+
+  .pack-cats { display: grid; gap: 1.1rem; }
+  .cat { padding: 1.1rem 1.2rem 1.2rem; }
+  .cat > h3 {
+    font-size: var(--fs-sm);
+    font-family: var(--mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .cat > h3 .cc { color: var(--ink-3); font-weight: 400; }
+  .cat ul { display: grid; gap: 0.15rem; }
+  .pitem {
+    display: grid;
+    grid-template-columns: 20px 1fr auto;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.4rem 0.3rem;
+    border-radius: 8px;
+  }
+  .pitem:hover { background: rgba(255, 255, 255, 0.04); }
+  .pitem input {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px; height: 20px;
+    margin: 0;
+    border: 1.5px solid var(--edge-hi);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+    flex: none;
+  }
+  .pitem input::before {
+    content: "";
+    width: 10px; height: 10px;
+    transform: scale(0);
+    transition: transform 0.12s ease;
+    background: #0b0e12;
+    clip-path: polygon(14% 44%, 0 65%, 43% 100%, 100% 16%, 84% 0, 40% 71%);
+  }
+  .pitem input:checked { background: var(--good); border-color: var(--good); }
+  .pitem input:checked::before { transform: scale(1); }
+  .pitem label { font-size: var(--fs-sm); cursor: pointer; min-width: 0; }
+  .pitem input:checked ~ label { color: var(--ink-3); text-decoration: line-through; }
+  .pitem .del {
+    font: inherit;
+    border: none;
+    background: none;
+    color: var(--ink-3);
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0 0.2rem;
+    opacity: 0;
+    transition: opacity 0.15s, color 0.15s;
+  }
+  .pitem:hover .del, .pitem:focus-within .del { opacity: 1; }
+  .pitem .del:hover { color: var(--rose); }
+  .pitem .who {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-3);
+    border: 1px solid var(--edge);
+    border-radius: 999px;
+    padding: 0.08rem 0.4rem;
+  }
+  .add-row { display: flex; gap: 0.5rem; margin-top: 0.7rem; }
+  .add-row input[type="text"] {
+    flex: 1;
+    font: inherit;
+    font-size: var(--fs-sm);
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--edge);
+    border-radius: 10px;
+    padding: 0.45rem 0.7rem;
+  }
+  .add-row input::placeholder { color: var(--ink-3); }
+  .add-row button {
+    font: inherit;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(150deg, rgba(255, 95, 122, 0.9), rgba(255, 147, 164, 0.5));
+    border: 1px solid rgba(255, 147, 164, 0.5);
+    border-radius: 10px;
+    padding: 0.45rem 0.9rem;
+    cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  }
+
+  /* ---------------- prep / notes / refs ---------------- */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.1rem; }
+  .panel { padding: 1.3rem 1.4rem 1.4rem; }
+  .panel h3 { font-size: var(--fs-md); margin-bottom: 0.7rem; }
+  .panel.warn { border-left: 3px solid var(--gold); }
+  .panel ul { display: grid; gap: 0.5rem; }
+  .panel li { font-size: var(--fs-sm); color: var(--ink-2); padding-left: 1.15rem; position: relative; }
+  .panel li::before { content: ""; position: absolute; left: 0; top: 0.6em; width: 6px; height: 6px; border-radius: 2px; background: var(--teal); }
+  .panel.warn li::before { background: var(--gold); }
+  .panel li b { color: var(--ink); font-weight: 600; }
+
+  .notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.1rem; }
+  .note { padding: 1.1rem 1.2rem; }
+  .note h4 {
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal-2);
+    margin-bottom: 0.4rem;
+  }
+  .note p { font-size: var(--fs-sm); color: var(--ink-2); }
+
+  .refs { display: grid; gap: 1px; background: var(--edge); border: 1px solid var(--edge); border-radius: var(--radius); overflow: hidden; }
+  .ref {
+    background: rgba(18, 22, 29, 0.6);
+    -webkit-backdrop-filter: var(--blur);
+    backdrop-filter: var(--blur);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 0.85rem 1.2rem;
+    text-decoration: none;
+  }
+  .ref:hover { background: rgba(30, 36, 46, 0.75); }
+  .ref .rl { font-size: var(--fs-sm); font-weight: 500; color: var(--ink); }
+  .ref .ru { font-family: var(--mono); font-size: var(--fs-xs); color: var(--ink-3); }
+
+  footer {
+    margin-top: 4rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--edge);
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    color: var(--ink-3);
+    line-height: 1.8;
+  }
+</style>
+</head>
+<body>
+
+<div class="nav-shell">
+  <nav class="nav" id="nav">
+    <a href="#passport">Passport</a>
+    <a href="#days">Days</a>
+    <a href="#decisions">Decisions</a>
+    <a href="#packing">Packing</a>
+    <a href="#prep">Prep</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <header class="passport glass" id="passport">
+    <p class="eyebrow">Anniversary Trip &middot; Sept 11&ndash;18, 2026</p>
+    <h1 class="grad">Glacier<br />Anniversary</h1>
+    <p class="sub">Seven days at Glacier National Park, Montana. One basecamp in Columbia Falls, an easy pace, scenery over trail miles.</p>
+    <dl class="boarding">
+      <div class="bd"><dt>Basecamp</dt><dd>Columbia Falls<span>556 Windy Acres Dr &middot; 7 nights</span></dd></div>
+      <div class="bd"><dt>Depart in</dt><dd>Fri 9/11 &middot; 11:43p<span>Delta DL1098 &rarr; FCA</span></dd></div>
+      <div class="bd"><dt>Return</dt><dd>Fri 9/18 &middot; 6:00p<span>Delta DL3798 &middot; gate by 4:30</span></dd></div>
+      <div class="bd"><dt>Car</dt><dd>Sedan<span>round-trip FCA &middot; paved only</span></dd></div>
+      <div class="bd"><dt>Party</dt><dd>2 travelers<span>carry-on only &middot; 1 knee to mind</span></dd></div>
+      <div class="bd"><dt>Long days</dt><dd>2 of 7<span>Sun GTSR &middot; Tue Many Glacier</span></dd></div>
+    </dl>
+  </header>
+
+  <section id="days">
+    <div class="sec-head">
+      <h2>Seven days</h2>
+      <p>Each day carries its own map with numbered stops. Tap <b>Open in Google Maps</b> for live turn-by-turn with every stop as a waypoint. Times are targets.</p>
+    </div>
+    <div class="range-key">
+      <span><span class="dot home"></span><b>HOME</b> under 30 min out</span>
+      <span><span class="dot mid"></span><b>MID</b> 30&ndash;90 min</span>
+      <span><span class="dot far"></span><b>FAR</b> 2 hr+ each way</span>
+    </div>
+    <div class="days" id="days-list"></div>
+  </section>
+
+  <section id="decisions">
+    <div class="sec-head">
+      <h2>Open decisions</h2>
+      <p>Two calls still to make, each with a hard "decide by" so a booking window doesn't close.</p>
+    </div>
+    <div class="flags">
+      <article class="flag glass">
+        <div class="flag-top">
+          <span class="flag-tag">Flag 1</span>
+          <h3>Grinnell Lake &mdash; boat or on foot?</h3>
+          <span class="decide">by Mon 9/14 PM</span>
+        </div>
+        <p>The <b>boat-assisted</b> version (across Swiftcurrent + Josephine, then 1.8 mi flat round trip) needs a reservation and Many Glacier tours can sell out &mdash; if you want it, book Monday night at reserve.glacierparkboats.com. $41.70&nbsp;pp.</p>
+        <p>The <b>on-foot</b> version is flat lakeshore, ~6.8 mi round trip, no advance booking &mdash; that call can wait until Tuesday morning at the trailhead.</p>
+      </article>
+      <article class="flag glass">
+        <div class="flag-top">
+          <span class="flag-tag">Flag 2</span>
+          <h3>Grinnell Glacier &mdash; only if the knee is holding up</h3>
+          <span class="decide">Tue 9/15, 8:45a at Swiftcurrent</span>
+        </div>
+        <p><b>Go only if</b> the knee handled Saturday and Sunday with no next-day trouble &mdash; <b>and</b> you're both up for a 5&ndash;6 hr trail day.</p>
+        <p><b>Realistic form:</b> no 6 AM start, so take the <b>11 AM boat</b>, walk up as far as feels good, turn around at your own pace. Full hike with the boat is 7.6 mi RT / 1,600 ft. <b>Decide Monday night</b> whether to also hold boat tickets.</p>
+        <ul class="bails">
+          <li><b>Lake Josephine</b> &mdash; ~2 mi in, flat. Turn here and it's basically the baseline day.</li>
+          <li><b>Base of the switchbacks</b> &mdash; ~3.3 mi, before the real climb. Good "we got the views" stop.</li>
+          <li><b>Anywhere on the ascent</b> &mdash; the payoff builds gradually; even halfway is spectacular.</li>
+        </ul>
+      </article>
+
+      <article class="cat glass" id="booking">
+        <h3>Before you go <span class="cc" id="bookCount">0 / 6</span></h3>
+        <ul id="book-list">
+          <li class="pitem"><input type="checkbox" id="bk-boat" data-bk="boat" /><label for="bk-boat">Lake McDonald boat cruise &mdash; Sat 9/12, 5:30 PM &middot; ~$27.80 pp &middot; reserve.glacierparkboats.com</label></li>
+          <li class="pitem"><input type="checkbox" id="bk-dinner" data-bk="dinner" /><label for="bk-dinner">Anniversary dinner reservation &mdash; Mon 9/14 &middot; Three Forks Grille or Belton Chalet</label></li>
+          <li class="pitem"><input type="checkbox" id="bk-pass" data-bk="pass" /><label for="bk-pass">Entrance pass &mdash; $35 7-day at the gate, or $80 America the Beautiful annual</label></li>
+          <li class="pitem"><input type="checkbox" id="bk-mgboat" data-bk="mgboat" /><label for="bk-mgboat">Many Glacier boat &mdash; only if Flag 1 / Flag 2 goes the boat route &middot; decide Mon night</label></li>
+          <li class="pitem"><input type="checkbox" id="bk-car" data-bk="car" /><label for="bk-car">Confirm the rental counter is staffed for an 11:43 PM landing</label></li>
+          <li class="pitem"><input type="checkbox" id="bk-maps" data-bk="maps" /><label for="bk-maps">Download offline maps &mdash; no cell service on GTSR, Many Glacier, North Fork</label></li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="packing">
+    <div class="sec-head">
+      <h2>Packing &mdash; carry-on only</h2>
+      <p>One roller + one daypack each (the daypack is your plane personal item and your trail bag). Tap to check off, add your own, delete what you overrule. Saved on this device.</p>
+    </div>
+
+    <div class="pack-gotcha glass">
+      <h4>Won't fly &mdash; plan around it</h4>
+      <ul>
+        <li><b>Bear spray</b> &mdash; prohibited in carry-on <em>and</em> checked. Buy it in Montana (~$50), leave or gift it at the end.</li>
+        <li><b>Trekking poles</b> &mdash; not allowed in carry-on. Buy a cheap pair in Kalispell/Whitefish or rent in Apgar &mdash; worth it for the knee on any downhill.</li>
+        <li><b>Liquids</b> &mdash; 3-1-1: nothing over 3.4 oz, one quart bag each. Sunscreen and bug spray in travel sizes.</li>
+        <li><b>No checked bag for 7 days</b> &mdash; pack for ~4 days + one mid-trip laundry (detergent sheets), or 7 of the small stuff.</li>
+      </ul>
+    </div>
+
+    <div class="pack-bar glass">
+      <span class="pct" id="packPct">0 packed</span>
+      <span class="meter"><i id="packMeter"></i></span>
+      <button type="button" id="packReset">Reset list</button>
+    </div>
+
+    <div class="pack-cats" id="pack-cats"></div>
+  </section>
+
+  <section id="prep">
+    <div class="sec-head">
+      <h2>Plan around</h2>
+      <p>Alpine weather, a fire-season wildcard, and a rental we'd like to return unscratched.</p>
+    </div>
+    <div class="grid-2">
+      <div class="panel glass warn">
+        <h3>Wildfire smoke protocol</h3>
+        <ul>
+          <li><b>Check each morning</b> &mdash; AirNow + the NPS conditions page before committing the day</li>
+          <li><b>West socked in?</b> The east side (St. Mary, Many Glacier) often clears on an east wind &mdash; and vice versa</li>
+          <li><b>Swap freely:</b> Wed and Thu are flexible; Sun (GTSR) and Tue (Many Glacier) are the anchors &mdash; move them relative to each other</li>
+          <li><b>Snow:</b> a September storm can shut Logan Pass for a day &mdash; flip to a valley or Whitefish day if so</li>
+        </ul>
+      </div>
+      <div class="panel glass">
+        <h3>Driving notes</h3>
+        <ul>
+          <li><b>No fuel inside the park</b> &mdash; top off in Columbia Falls or St. Mary before park days</li>
+          <li><b>Going-to-the-Sun Road</b> &mdash; narrow, cliff-edge, ~40 mph max; the drive itself takes ~2 hrs one way</li>
+          <li><b>No cell service</b> on GTSR, Many Glacier, or the North Fork &mdash; download offline maps first</li>
+          <li><b>Logan Pass parking</b> &mdash; new 3-hour limit, no shuttle after Sept 7; aim to arrive by ~10 AM</li>
+          <li><b>Skip the dirt</b> &mdash; Bowman Lake Rd and the far North Fork are washboard; not for the sedan</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sec-head" style="margin-top:2.5rem;">
+      <h2>Field notes</h2>
+    </div>
+    <div class="notes">
+      <div class="note glass">
+        <h4>Why the water is that color</h4>
+        <p>Glacial meltwater carries "rock flour" &mdash; silt ground fine by moving ice. It scatters light toward that milky turquoise, strongest in bright afternoon sun.</p>
+      </div>
+      <div class="note glass">
+        <h4>The Divide splits the weather</h4>
+        <p>The Continental Divide runs down the park's spine. West and east can differ by 15&deg;F and a whole sky. Pack for both, every day.</p>
+      </div>
+      <div class="note glass">
+        <h4>Larches turn late September</h4>
+        <p>Alpine larch &mdash; the conifer that drops its needles &mdash; goes gold in the high basins right around your dates. Watch for the first of it near Logan Pass.</p>
+      </div>
+      <div class="note glass">
+        <h4>No reservations in 2026</h4>
+        <p>The timed-entry system is suspended park-wide this year. Just drive in with a pass. The only pinch is Logan Pass parking.</p>
+      </div>
+    </div>
+
+    <div class="sec-head" style="margin-top:2.5rem;">
+      <h2>Check the week of</h2>
+    </div>
+    <div class="refs">
+      <a class="ref" href="https://www.nps.gov/glac/planyourvisit/conditions.htm"><span class="rl">NPS Glacier &mdash; conditions &amp; road status</span><span class="ru">nps.gov/glac</span></a>
+      <a class="ref" href="https://www.nps.gov/glac/planyourvisit/logan2026faq.htm"><span class="rl">Logan Pass 2026 &mdash; parking &amp; access</span><span class="ru">nps.gov/glac</span></a>
+      <a class="ref" href="https://fire.airnow.gov/"><span class="rl">AirNow &mdash; fire &amp; smoke map</span><span class="ru">fire.airnow.gov</span></a>
+      <a class="ref" href="https://reserve.glacierparkboats.com/"><span class="rl">Glacier Park Boat Co. &mdash; reservations</span><span class="ru">reserve.glacierparkboats.com</span></a>
+      <a class="ref" href="https://www.nps.gov/glac/planyourvisit/weather.htm"><span class="rl">Glacier weather &amp; webcams</span><span class="ru">nps.gov/glac</span></a>
+    </div>
+  </section>
+
+  <footer>
+    Assembled Sep 5, 2026 &middot; drive times, daylight, and mileage are estimates &mdash; reconfirm road, fire, and boat status at nps.gov/glac before each day.<br />
+    Basecamp: 556 Windy Acres Dr, Columbia Falls, MT 59912 &middot; packing checkboxes save to this browser only &middot; maps are schematic &mdash; use the Google Maps link to navigate.
+  </footer>
+
+</div>
+
+<!-- schematic basemap, used by every day map -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="basemap" viewBox="0 0 800 560">
+    <!-- park boundary -->
+    <path d="M182 92 L468 74 L560 122 L602 224 L582 384 L516 432 L300 446 L214 388 L178 262 Z"
+      fill="rgba(255,255,255,0.018)" stroke="rgba(255,255,255,0.13)" stroke-width="1.4" stroke-dasharray="5 6" />
+    <!-- Going-to-the-Sun Road corridor glow -->
+    <path d="M200 358 L232 330 L300 288 L357 255 L400 270 L460 281 L534 285 L566 289"
+      fill="none" stroke="rgba(255,147,164,0.16)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+    <!-- water -->
+    <g fill="rgba(87,198,214,0.18)" stroke="rgba(87,198,214,0.5)" stroke-width="1.4">
+      <rect x="168" y="322" width="120" height="19" rx="9.5" transform="rotate(-34 228 331)" />
+      <rect x="408" y="263" width="132" height="15" rx="7.5" transform="rotate(-6 474 270)" />
+      <ellipse cx="486" cy="208" rx="15" ry="7" />
+      <ellipse cx="470" cy="217" rx="10" ry="5.5" />
+      <rect x="236" y="120" width="52" height="10" rx="5" transform="rotate(-27 262 125)" />
+      <ellipse cx="88" cy="405" rx="12" ry="8" />
+      <ellipse cx="108" cy="556" rx="64" ry="30" />
+    </g>
+    <!-- roads -->
+    <g fill="none" stroke="rgba(255,255,255,0.26)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="200,358 232,330 300,288 357,255 400,270 460,281 534,285 566,289" stroke="rgba(255,147,164,0.72)" stroke-width="2.3" />
+      <polyline points="200,358 250,404 330,436 430,448 520,432" />
+      <polyline points="560,288 572,262 576,236" />
+      <polyline points="576,236 520,212 490,206" />
+      <polyline points="150,470 172,378 214,258 250,150 255,128" stroke-dasharray="2 5" />
+      <polyline points="95,495 150,470 200,358" />
+      <polyline points="150,470 105,415" />
+    </g>
+    <!-- labels -->
+    <g fill="rgba(244,247,251,0.44)" font-size="10" letter-spacing="1.4">
+      <text x="150" y="356" text-anchor="middle">LAKE McDONALD</text>
+      <text x="492" y="314" text-anchor="middle">ST. MARY LAKE</text>
+      <text x="486" y="184" text-anchor="middle">MANY GLACIER</text>
+      <text x="352" y="232" text-anchor="middle">LOGAN PASS</text>
+      <text x="255" y="112" text-anchor="middle">POLEBRIDGE</text>
+      <text x="108" y="520" text-anchor="middle" fill="rgba(87,198,214,0.6)">FLATHEAD LK</text>
+    </g>
+    <text x="150" y="486" text-anchor="middle" fill="rgba(244,247,251,0.7)" font-size="10.5" letter-spacing="0.5">&#9733; COLUMBIA FALLS</text>
+  </symbol>
+</svg>
+
+<script>
+  (function () {
+    "use strict";
+
+    /* ---------------- points of interest (basemap coords 0..800 / 0..560) ---------------- */
+    var POI = {
+      airport:        { n: "Glacier Park Intl Airport (FCA)", x: 95,  y: 495, q: "Glacier Park International Airport, Montana" },
+      basecamp:       { n: "Basecamp — Columbia Falls",  x: 150, y: 470, q: "556 Windy Acres Dr, Columbia Falls, MT 59912" },
+      whitefish_town: { n: "Downtown Whitefish",              x: 105, y: 415, q: "Downtown Whitefish, MT" },
+      whitefish_lake: { n: "Whitefish Lake State Park",       x: 92,  y: 405, q: "Whitefish Lake State Park, MT" },
+      whitefish_mtn:  { n: "Whitefish Mountain Resort",       x: 100, y: 388, q: "Whitefish Mountain Resort, Whitefish, MT" },
+      bigfork:        { n: "Bigfork village",                 x: 140, y: 520, q: "Bigfork, MT" },
+      wayfarers:      { n: "Wayfarers State Park",            x: 150, y: 515, q: "Wayfarers State Park, Bigfork, MT" },
+      hungry_horse:   { n: "Hungry Horse Dam",                x: 185, y: 452, q: "Hungry Horse Dam, MT" },
+      apgar:          { n: "Apgar Village & Visitor Center",  x: 200, y: 358, q: "Apgar Visitor Center, West Glacier, MT" },
+      mcdonald_lodge: { n: "Lake McDonald Lodge",             x: 232, y: 330, q: "Lake McDonald Lodge, Montana" },
+      cedars:         { n: "Trail of the Cedars",             x: 252, y: 314, q: "Trail of the Cedars, Glacier National Park" },
+      avalanche:      { n: "Avalanche Lake Trailhead",        x: 256, y: 310, q: "Avalanche Lake Trailhead, Glacier National Park" },
+      the_loop:       { n: "The Loop",                        x: 300, y: 288, q: "The Loop, Going-to-the-Sun Road, Glacier National Park" },
+      bird_woman:     { n: "Bird Woman Falls Overlook",       x: 328, y: 270, q: "Bird Woman Falls Overlook, Going-to-the-Sun Road, MT" },
+      logan_pass:     { n: "Logan Pass + Hidden Lake",        x: 357, y: 255, q: "Logan Pass Visitor Center, Montana" },
+      jackson:        { n: "Jackson Glacier Overlook",        x: 400, y: 270, q: "Jackson Glacier Overlook, Going-to-the-Sun Road, MT" },
+      sunrift:        { n: "Sunrift Gorge",                   x: 430, y: 277, q: "Sunrift Gorge, Glacier National Park" },
+      sun_point:      { n: "Sun Point",                       x: 460, y: 281, q: "Sun Point, Glacier National Park" },
+      stmary_falls:   { n: "St. Mary Falls Trailhead",        x: 490, y: 284, q: "St. Mary Falls Trailhead, Glacier National Park" },
+      wild_goose:     { n: "Wild Goose Island Lookout",       x: 520, y: 285, q: "Wild Goose Island Overlook, Montana" },
+      rising_sun:     { n: "Rising Sun",                      x: 550, y: 287, q: "Rising Sun, Glacier National Park, MT" },
+      stmary_town:    { n: "St. Mary",                        x: 560, y: 288, q: "St. Mary, MT" },
+      mg_entrance:    { n: "Many Glacier Entrance",           x: 560, y: 226, q: "Many Glacier Entrance Station, Babb, MT" },
+      swiftcurrent:   { n: "Swiftcurrent Lake",               x: 490, y: 206, q: "Swiftcurrent Lake, Glacier National Park" },
+      redrock:        { n: "Redrock Falls",                   x: 478, y: 188, q: "Redrock Falls, Glacier National Park" },
+      mg_hotel:       { n: "Many Glacier Hotel",              x: 496, y: 210, q: "Many Glacier Hotel, Babb, MT" },
+      grinnell_lake:  { n: "Grinnell Lake",                   x: 470, y: 216, q: "Grinnell Lake, Glacier National Park" },
+      rocky_point:    { n: "Rocky Point Trail (Fish Creek)",  x: 206, y: 350, q: "Rocky Point Trailhead, Fish Creek, Glacier National Park" },
+      three_forks:    { n: "Three Forks Grille",              x: 150, y: 466, q: "Three Forks Grille, Columbia Falls, MT" }
+    };
+
+    var BASE_CARRY = "water 2L · snacks · puffy · rain shell · warm hat · sun kit · bear spray · offline map · headlamp · blister kit · cash";
+
+    var DAYS = [
+      {
+        dow: "FRI", date: "Sep 11", range: "home", title: "Arrival", sun: "land 11:43 PM",
+        note: "Land at FCA on <b>Delta DL1098</b>, grab the rental, ~20 min to the Airbnb. Straight to bed — the trip starts Saturday.",
+        loop: false,
+        stops: [ { p: "airport" }, { p: "basecamp" } ],
+        carry: [ { t: "IDs / REAL ID" }, { t: "Rental confirmation" }, { t: "Airbnb door code" }, { t: "Phone + charger" } ],
+        foot: "drive ~20 min · on foot 0 mi"
+      },
+      {
+        dow: "SAT", date: "Sep 12", range: "mid", title: "West-side warm-up", sun: "↑ 7:08  ↓ 7:55",
+        note: "Slow start, out ~<b>10:00 AM</b>. Flat trails, first views, then the boat before dinner. Buy <b>bear spray</b> on the way.",
+        loop: true,
+        stops: [
+          { p: "apgar", s: "visitor center + shoreline" },
+          { p: "cedars", s: "0.9 mi flat boardwalk" },
+          { p: "avalanche", s: "4.6 mi RT / 730 ft", opt: true },
+          { p: "mcdonald_lodge", s: "5:30 PM boat cruise · $27.80 pp" }
+        ],
+        carry: [ { t: "dry bag for the boat" }, { t: "swimsuit (Airbnb hot tub)" }, { t: "camera" } ],
+        foot: "drive ~1.5 hr total · on foot ~1–5 mi"
+      },
+      {
+        dow: "SUN", date: "Sep 13", range: "far", title: "Going-to-the-Sun Road + St. Mary", sun: "↑ 7:09  ↓ 7:53",
+        note: "The big scenic day. Leave <b>8:00 AM</b> for a Logan Pass spot by ~10 (3-hr limit, no shuttle). Drive west→east, back over the pass in golden light.",
+        loop: true,
+        stops: [
+          { p: "mcdonald_lodge", s: "lakeside pullouts" },
+          { p: "the_loop" },
+          { p: "bird_woman", s: "roadside overlook" },
+          { p: "logan_pass", s: "boardwalk as far as comfy · 2.7 mi RT" },
+          { p: "jackson" },
+          { p: "sunrift" },
+          { p: "sun_point" },
+          { p: "stmary_falls", s: "1.7 mi RT, gentle", opt: true },
+          { p: "wild_goose" },
+          { p: "rising_sun", s: "early dinner in St. Mary" }
+        ],
+        carry: [ { t: "extra layers — Logan Pass wind", hot: true }, { t: "Dramamine before the drive" }, { t: "headlamp — dark return", hot: true }, { t: "extra water" } ],
+        foot: "drive ~5 hr round trip · on foot up to 2.7 mi"
+      },
+      {
+        dow: "MON", date: "Sep 14", range: "home", title: "Rest day + the dinner out", sun: "↑ 7:11  ↓ 7:52",
+        note: "No park. Placed between the two long drives — sleep in, no agenda. <b>Reserve the dinner</b> ahead.",
+        loop: true,
+        stops: [
+          { p: "whitefish_town", s: "downtown, lunch, a brewery" },
+          { p: "whitefish_lake", s: "easy lake time" },
+          { p: "three_forks", s: "anniversary dinner — or Belton Chalet, West Glacier" }
+        ],
+        carry: [ { t: "nice-dinner outfit" }, { t: "swimsuit (Whitefish Lake)" } ],
+        foot: "drive under 1 hr total · on foot ~0 mi"
+      },
+      {
+        dow: "TUE", date: "Sep 15", range: "far", title: "Many Glacier", sun: "↑ 7:12  ↓ 7:50",
+        note: "The long haul — ~2.5–2.75 hr each way via US-2 / Browning / Babb, <b>all paved</b>. Leave <b>8:00 AM</b>. Pick the tier at the Swiftcurrent trailhead (see Flag 2). Baseline: Swiftcurrent Lake loop (2.6 mi flat) + Redrock Falls (3.6 mi RT) + hotel deck lunch.",
+        loop: true,
+        stops: [
+          { p: "mg_entrance" },
+          { p: "swiftcurrent", s: "2.6 mi flat nature loop" },
+          { p: "redrock", s: "3.6 mi RT / 250 ft" },
+          { p: "mg_hotel", s: "lunch / deck · open thru Sep 21" },
+          { p: "grinnell_lake", s: "+1.8 mi flat via 11 AM boat", opt: true }
+        ],
+        carry: [ { t: "boat tickets (if booked)", hot: true }, { t: "packed lunch — long day" }, { t: "knee brace + KT tape", hot: true }, { t: "extra water & snacks" }, { t: "cash for hotel lunch" } ],
+        foot: "drive ~5–5.5 hr round trip · on foot ~6 mi baseline · home ~7 PM"
+      },
+      {
+        dow: "WED", date: "Sep 16", range: "mid", title: "Whitefish Mountain + Flathead Lake", sun: "↑ 7:13  ↓ 7:48",
+        note: "Low-mileage, all west-side — the <b>smoke-buffer day</b>. If the east side hazed in on Sun or Tue, swap that day here.",
+        loop: true,
+        stops: [
+          { p: "whitefish_mtn", s: "scenic lift · runs thru Sep 20" },
+          { p: "bigfork", s: "lakeside village" },
+          { p: "wayfarers", s: "rocky shore, short trails" }
+        ],
+        carry: [ { t: "swimsuit (Flathead Lake)" }, { t: "warm layer for the summit", hot: true } ],
+        foot: "drive ~1.5 hr total · on foot ~1–2 mi"
+      },
+      {
+        dow: "THU", date: "Sep 17", range: "mid", title: "Second west-side park day", sun: "↑ 7:15  ↓ 7:46",
+        note: "The \"do the favorite again / catch what you missed\" day. Keep it soft — last full day.",
+        loop: true,
+        stops: [
+          { p: "rocky_point", s: "~2 mi flat, lake views" },
+          { p: "avalanche", s: "if the knee's good and you skipped it", opt: true },
+          { p: "mcdonald_lodge", s: "slow morning + final sunset ~7:46" }
+        ],
+        carry: [ { t: "camera for the last sunset" } ],
+        foot: "drive ~1.5 hr total · on foot ~2–5 mi by choice"
+      },
+      {
+        dow: "FRI", date: "Sep 18", range: "home", title: "Departure", sun: "fly 6:00 PM",
+        note: "Checkout ~10–11 AM. Flight <b>DL3798 leaves 6:00 PM</b> — be at FCA by ~4:30, gas up first. Morning is short and close only.",
+        loop: false,
+        stops: [
+          { p: "basecamp", s: "pack, checkout" },
+          { p: "hungry_horse", s: "quick detour if time", opt: true },
+          { p: "airport", s: "gas up en route" }
+        ],
+        carry: [ { t: "chargers + snacks for the flight" }, { t: "leave/gift the bear spray", hot: true } ],
+        foot: "drive ~1 hr total incl. airport"
+      }
+    ];
+
+    function enc(s) { return encodeURIComponent(s); }
+
+    function gmapsHref(day) {
+      var qs = day.stops.map(function (s) { return POI[s.p].q; });
+      if (day.loop) {
+        var home = POI.basecamp.q;
+        var mids = qs.slice(0, 9).map(enc).join("|");
+        return "https://www.google.com/maps/dir/?api=1&travelmode=driving&origin=" + enc(home) +
+               "&destination=" + enc(home) + "&waypoints=" + mids;
+      }
+      if (qs.length < 2) return "https://www.google.com/maps/search/?api=1&query=" + enc(qs[0] || "Glacier National Park");
+      return "https://www.google.com/maps/dir/?api=1&travelmode=driving&origin=" + enc(qs[0]) +
+             "&destination=" + enc(qs[qs.length - 1]) +
+             (qs.length > 2 ? "&waypoints=" + qs.slice(1, -1).map(enc).join("|") : "");
+    }
+
+    function pinSVG(day) {
+      var parts = [];
+      day.stops.forEach(function (s, i) {
+        var poi = POI[s.p];
+        var opt = !!s.opt;
+        parts.push(
+          '<g transform="translate(' + poi.x + ',' + poi.y + ')">' +
+            '<circle r="15" fill="rgba(255,95,122,0.20)"></circle>' +
+            '<circle r="9.5" fill="' + (opt ? "rgba(9,12,17,0.92)" : "#ff5f7a") + '" stroke="' + (opt ? "rgba(255,147,164,0.7)" : "rgba(255,255,255,0.5)") + '" stroke-width="1.3"></circle>' +
+            '<text x="0" y="3.3" text-anchor="middle" font-size="10" font-weight="700" fill="' + (opt ? "#ff93a4" : "#fff") + '">' + (i + 1) + '</text>' +
+          '</g>'
+        );
+      });
+      return '<svg class="daymap" viewBox="0 0 800 560" role="img" aria-label="Schematic map of the day\'s stops">' +
+               '<use href="#basemap"></use>' + parts.join("") +
+             '</svg>';
+    }
+
+    function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]; }); }
+
+    function dayCard(day) {
+      var stopRows = day.stops.map(function (s, i) {
+        var poi = POI[s.p];
+        return '<div class="stop' + (s.opt ? " opt" : "") + '">' +
+                 '<span class="pin">' + (i + 1) + '</span>' +
+                 '<span><b>' + esc(poi.n) + '</b>' + (s.s ? ' <span class="s">— ' + esc(s.s) + '</span>' : "") + (s.opt ? ' <span class="s">(optional)</span>' : "") + '</span>' +
+               '</div>';
+      }).join("");
+
+      var chips = [ '<span class="chip">base kit: ' + esc(BASE_CARRY) + '</span>' ].concat(
+        (day.carry || []).map(function (c) { return '<span class="chip' + (c.hot ? " hot" : "") + '">+ ' + esc(c.t) + '</span>'; })
+      ).join("");
+
+      return '<article class="day glass" data-range="' + day.range + '">' +
+        '<div class="day-head">' +
+          '<span class="day-date"><b>' + day.dow + '</b>' + esc(day.date) + '</span>' +
+          '<h3>' + esc(day.title) + '</h3>' +
+          '<span class="range-chip">' + day.range + '</span>' +
+        '</div>' +
+        '<div class="day-sun">' + esc(day.sun) + '</div>' +
+        '<p class="day-note">' + day.note + '</p>' +
+        '<div class="day-grid">' +
+          '<div>' + pinSVG(day) + '</div>' +
+          '<div class="stoplist">' + stopRows + '</div>' +
+        '</div>' +
+        '<div class="day-tools">' +
+          '<a class="gmaps-btn" href="' + gmapsHref(day) + '" target="_blank" rel="noopener">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>' +
+            'Open in Google Maps' +
+          '</a>' +
+        '</div>' +
+        '<div class="carry"><div class="lbl">Day pack</div><div class="chips">' + chips + '</div></div>' +
+        '<div class="day-foot">' + esc(day.foot) + '</div>' +
+      '</article>';
+    }
+
+    var dl = document.getElementById("days-list");
+    if (dl) dl.innerHTML = DAYS.map(dayCard).join("");
+
+    /* ---------------- packing list ---------------- */
+    var PACK = [
+      ["Clothing — each", [
+        "3–4 base tops / tees", "1 sun hoody or long-sleeve", "1–2 hiking pants", "1 casual pants / jeans",
+        "1 pair shorts", "7 underwear", "5 socks (2 hiking)", "Sleepwear", "1 nice-dinner outfit", "Swimsuit", "Buff / neck gaiter"
+      ]],
+      ["Layers & weather — each", [
+        "Packable puffy jacket", "Rain / wind shell", "Fleece or midlayer", "Warm beanie", "Sun hat / cap", "Light gloves (optional)"
+      ]],
+      ["Footwear — each", [
+        "Trail runners / light hikers (wear on plane)", "Casual sneakers", "Sandals / flip-flops"
+      ]],
+      ["Daypacks & gear", [
+        "2× daypack 18–25L (plane personal item + trail bag)", "2× water bottles or a 2L reservoir", "Headlamp ×2",
+        "First-aid + blister kit (KT tape / moleskin)", "Knee brace / sleeve", "Sunglasses ×2", "Compact binoculars",
+        "Dry bag + zip bags (boat cruise)", "Trail snacks / bars", "Reusable tote (laundry / groceries)", "Detergent sheets (1 mid-trip wash)"
+      ]],
+      ["Tech", [
+        "Phones + cables", "Power bank", "USB-C car charger + phone mount", "Multi-port wall charger", "Headphones", "Camera + battery + card (optional)"
+      ]],
+      ["Toiletries & meds — 3-1-1, one quart bag each", [
+        "Toothbrush / paste / floss", "Deodorant", "Moisturizer / skincare (dry air)", "Sunscreen ≤3.4 oz + SPF lip balm",
+        "Bug spray (travel size)", "Ibuprofen (knee) + prescriptions", "Dramamine (GTSR switchbacks)", "Benadryl / Imodium",
+        "Contacts + glasses + solution", "Razor / hairbrush / hair ties", "Menstrual supplies", "Hand sanitizer + travel tissues"
+      ]],
+      ["Documents", [
+        "Driver's licenses (REAL ID)", "Credit cards + ~$60 cash (Polebridge)", "Rental car confirmation",
+        "Airbnb address + door code", "This dashboard — add to home screen", "America the Beautiful pass (if owned)"
+      ]],
+      ["Buy in Montana — can't fly", [
+        "Bear spray (~$50)", "Trekking pole(s)", "Trail snacks + breakfast groceries", "Firewood if the Airbnb has a pit (buy local)"
+      ]]
+    ];
+
+    var CKEY = "glacier-pack-v2";
+    var store = load();
+    function load() { try { return JSON.parse(localStorage.getItem(CKEY) || "{}") || {}; } catch (e) { return {}; } }
+    function save() { try { localStorage.setItem(CKEY, JSON.stringify(store)); } catch (e) {} }
+    if (!store.checked) store.checked = {};
+    if (!store.removed) store.removed = {};
+    if (!store.added) store.added = {};
+
+    function slug(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+
+    function itemsFor(cat) {
+      var base = (PACK.find(function (p) { return p[0] === cat; }) || [null, []])[1];
+      var out = base.filter(function (l) { return !store.removed[cat + "::" + l]; }).map(function (l) { return { label: l, custom: false }; });
+      (store.added[cat] || []).forEach(function (l) { out.push({ label: l, custom: true }); });
+      return out;
+    }
+
+    function render() {
+      var host = document.getElementById("pack-cats");
+      if (!host) return;
+      var total = 0, done = 0;
+      host.innerHTML = PACK.map(function (grp) {
+        var cat = grp[0];
+        var items = itemsFor(cat);
+        var rows = items.map(function (it) {
+          var id = cat + "::" + it.label;
+          var on = !!store.checked[id];
+          var dom = "pk-" + slug(id);
+          total++; if (on) done++;
+          return '<li class="pitem">' +
+            '<input type="checkbox" id="' + dom + '" data-id="' + esc(id) + '"' + (on ? " checked" : "") + ' />' +
+            '<label for="' + dom + '">' + esc(it.label) + '</label>' +
+            '<button class="del" title="Remove" data-cat="' + esc(cat) + '" data-label="' + esc(it.label) + '" data-custom="' + (it.custom ? "1" : "0") + '">&times;</button>' +
+          '</li>';
+        }).join("");
+        return '<div class="cat glass">' +
+          '<h3>' + esc(cat) + '<span class="cc">' + items.length + '</span></h3>' +
+          '<ul>' + rows + '</ul>' +
+          '<div class="add-row">' +
+            '<input type="text" placeholder="Add to ' + esc(cat.split(" — ")[0]) + '…" data-addcat="' + esc(cat) + '" />' +
+            '<button type="button" data-addbtn="' + esc(cat) + '">Add</button>' +
+          '</div>' +
+        '</div>';
+      }).join("");
+
+      var pct = total ? Math.round((done / total) * 100) : 0;
+      var m = document.getElementById("packMeter");
+      var p = document.getElementById("packPct");
+      if (m) m.style.width = pct + "%";
+      if (p) p.textContent = done + " / " + total + " packed";
+    }
+
+    function refreshMeter() {
+      var total = document.querySelectorAll("#pack-cats .pitem input[type=checkbox]").length;
+      var done = document.querySelectorAll("#pack-cats .pitem input[type=checkbox]:checked").length;
+      var pct = total ? Math.round((done / total) * 100) : 0;
+      var m = document.getElementById("packMeter"), p = document.getElementById("packPct");
+      if (m) m.style.width = pct + "%";
+      if (p) p.textContent = done + " / " + total + " packed";
+    }
+
+    document.addEventListener("change", function (e) {
+      var cb = e.target.closest("#pack-cats .pitem input[type=checkbox]");
+      if (!cb) return;
+      store.checked[cb.getAttribute("data-id")] = cb.checked;
+      save();
+      refreshMeter();
+    });
+
+    document.addEventListener("click", function (e) {
+      var del = e.target.closest(".del");
+      if (del) {
+        var cat = del.getAttribute("data-cat"), label = del.getAttribute("data-label");
+        if (del.getAttribute("data-custom") === "1") {
+          store.added[cat] = (store.added[cat] || []).filter(function (l) { return l !== label; });
+        } else {
+          store.removed[cat + "::" + label] = true;
+        }
+        delete store.checked[cat + "::" + label];
+        save(); render();
+        return;
+      }
+      var addb = e.target.closest("[data-addbtn]");
+      if (addb) {
+        var c = addb.getAttribute("data-addbtn");
+        var input = document.querySelector('input[data-addcat="' + c.replace(/"/g, '\\"') + '"]');
+        var v = input && input.value.trim();
+        if (v) {
+          store.added[c] = (store.added[c] || []).concat([v]);
+          save(); render();
+        }
+        return;
+      }
+      if (e.target.id === "packReset") {
+        if (confirm("Reset the packing list to defaults? This clears your checks, additions, and deletions on this device.")) {
+          store = { checked: {}, removed: {}, added: {} };
+          save(); render();
+        }
+      }
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" && e.target.matches("input[data-addcat]")) {
+        var c = e.target.getAttribute("data-addcat");
+        var v = e.target.value.trim();
+        if (v) { store.added[c] = (store.added[c] || []).concat([v]); save(); render(); }
+      }
+    });
+
+    render();
+
+    /* ---------------- before-you-go checklist ---------------- */
+    var BKEY = "glacier-book-v1";
+    var bk = {};
+    try { bk = JSON.parse(localStorage.getItem(BKEY) || "{}") || {}; } catch (e) { bk = {}; }
+    var bkBoxes = Array.prototype.slice.call(document.querySelectorAll("#book-list input[data-bk]"));
+    function bkCount() {
+      var done = bkBoxes.filter(function (b) { return b.checked; }).length;
+      var el = document.getElementById("bookCount");
+      if (el) el.textContent = done + " / " + bkBoxes.length;
+    }
+    bkBoxes.forEach(function (b) {
+      var k = b.getAttribute("data-bk");
+      if (bk[k]) b.checked = true;
+      b.addEventListener("change", function () {
+        bk[k] = b.checked;
+        try { localStorage.setItem(BKEY, JSON.stringify(bk)); } catch (e) {}
+        bkCount();
+      });
+    });
+    bkCount();
+
+    /* ---------------- nav scroll-spy ---------------- */
+    var links = Array.prototype.slice.call(document.querySelectorAll("#nav a"));
+    var secs = links.map(function (a) { return document.querySelector(a.getAttribute("href")); });
+    function spy() {
+      var y = window.scrollY + 120;
+      var idx = 0;
+      for (var i = 0; i < secs.length; i++) { if (secs[i] && secs[i].offsetTop <= y) idx = i; }
+      links.forEach(function (a, i) { a.classList.toggle("on", i === idx); });
+    }
+    window.addEventListener("scroll", spy, { passive: true });
+    spy();
+  })();
+</script>
+</body>
+</html>
