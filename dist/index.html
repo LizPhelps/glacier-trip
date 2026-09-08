@@ -306,6 +306,47 @@
   .day-note { font-size: var(--fs-sm); color: var(--ink-2); max-width: var(--measure); }
   .day-note b { color: var(--ink); font-weight: 600; }
 
+  .day-view-toggle {
+    display: inline-flex;
+    gap: 0.18rem;
+    margin-top: 1rem;
+    padding: 0.22rem;
+    border: 1px solid var(--edge);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.16);
+  }
+  .day-view-toggle button {
+    font: inherit;
+    font-size: var(--fs-xs);
+    font-family: var(--mono);
+    letter-spacing: 0.06em;
+    color: var(--ink-2);
+    background: transparent;
+    border: 0;
+    border-radius: 999px;
+    padding: 0.42rem 0.72rem;
+    cursor: pointer;
+  }
+  .day-view-toggle button[aria-pressed="true"] {
+    color: #fff;
+    background: rgba(87, 198, 214, 0.22);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+  }
+  .day-timeline { margin-top: 1.2rem; padding: clamp(1.1rem, 3vw, 1.4rem); }
+  .day-timeline h4 { font-size: var(--fs-md); margin-bottom: 0.35rem; }
+  .day-timeline > p { max-width: var(--measure); font-size: var(--fs-sm); color: var(--ink-2); }
+  .day-timeline .timeline { margin-top: 1.15rem; }
+  .day-timeline .timeline li { padding-bottom: 0.86rem; }
+  .day-timeline .timeline time { min-width: clamp(4.6rem, 18vw, 7.4rem); color: var(--teal-2); font-size: var(--fs-sm); }
+  .day-timeline .timeline li::before { width: 9px; height: 9px; left: -5px; background: var(--teal); box-shadow: 0 0 0 4px rgba(87, 198, 214, 0.12); }
+  .day-timeline .timeline b { color: var(--ink); }
+  .day-timeline .timeline .detail { color: var(--ink-2); }
+  .day-timeline .timeline .detail::before { content: " — "; color: var(--ink-3); }
+  @media (max-width: 460px) {
+    .day-timeline .timeline time { display: block; margin-bottom: 0.12rem; }
+    .day-timeline .timeline li { padding-left: 0.82rem; }
+  }
+
   .day-grid {
     margin-top: 1.1rem;
     display: grid;
@@ -1014,7 +1055,18 @@
         loop: false,
         stops: [ { p: "airport" }, { p: "basecamp" } ],
         carry: [ { t: "IDs / REAL ID" }, { t: "Rental confirmation" }, { t: "Airbnb door code" }, { t: "Phone + charger" } ],
-        foot: "drive ~20 min · on foot 0 mi"
+        foot: "drive ~20 min · on foot 0 mi",
+        timeline: {
+          title: "Arrival, then straight to bed",
+          lead: "Keep this one deliberately simple. The only mission is keys, door code, sleep.",
+          items: [
+            { time: "11:43 PM", title: "Land at FCA", detail: "phones off airplane mode; confirm the rental counter plan." },
+            { time: "12:10 AM", title: "Rental pickup", detail: "photo the car, load bags, set Airbnb as the destination." },
+            { time: "12:35 AM", title: "Leave the airport", detail: "no errands tonight; save the grocery stop for Saturday." },
+            { time: "12:55 AM", title: "Arrive at basecamp", detail: "unpack only morning essentials and plug in phones." },
+            { time: "1:15 AM", title: "Lights out", detail: "Saturday stays easy on purpose." }
+          ]
+        }
       },
       {
         dow: "SAT", date: "Sep 12", range: "mid", title: "West-side warm-up", sun: "↑ 7:08  ↓ 7:55",
@@ -1027,7 +1079,22 @@
           { p: "mcdonald_lodge", s: "5:30 PM boat cruise · $27.80 pp" }
         ],
         carry: [ { t: "dry bag for the boat" }, { t: "swimsuit (Airbnb hot tub)" }, { t: "camera" } ],
-        foot: "drive ~1.5 hr total · on foot ~1–5 mi"
+        foot: "drive ~1.5 hr total · on foot ~1–5 mi",
+        timeline: {
+          title: "Saturday has one fixed clock",
+          lead: "The hike is flexible; the boat is not. Keep the afternoon buffer intact.",
+          items: [
+            { time: "9:00 AM", title: "Slow breakfast + pack", detail: "water, layers, snacks, and dry bag ready before you leave." },
+            { time: "10:00 AM", title: "Leave basecamp", detail: "buy bear spray and breakfast groceries first if needed." },
+            { time: "10:45 AM", title: "Apgar + shoreline", detail: "visitor center, lake views, and a low-key first stop." },
+            { time: "11:30 AM", title: "Trail of the Cedars", detail: "easy 0.9 mi boardwalk; reassess the knee before Avalanche." },
+            { time: "12:15 PM", title: "Choose Avalanche Lake", detail: "have lunch, then go only if energy and weather feel right." },
+            { time: "3:00 PM", title: "Hard turn-around", detail: "leave time to return to the lodge without rushing." },
+            { time: "4:30 PM", title: "Park at Lake McDonald Lodge", detail: "5:00 check-in, 5:30 cruise." },
+            { time: "6:40 PM", title: "Dinner or lodge drinks", detail: "enjoy the post-cruise glow; no second long drive." },
+            { time: "8:30 PM", title: "Back at basecamp", detail: "hot tub, charge devices, set Sunday layers out." }
+          ]
+        }
       },
       {
         dow: "SUN", date: "Sep 13", range: "far", title: "Going-to-the-Sun Road + St. Mary", sun: "↑ 7:09  ↓ 7:53",
@@ -1046,7 +1113,23 @@
           { p: "rising_sun", s: "early dinner in St. Mary" }
         ],
         carry: [ { t: "extra layers — Logan Pass wind", hot: true }, { t: "Dramamine before the drive" }, { t: "headlamp — dark return", hot: true }, { t: "extra water" } ],
-        foot: "drive ~5 hr round trip · on foot up to 2.7 mi"
+        foot: "drive ~5 hr round trip · on foot up to 2.7 mi",
+        timeline: {
+          title: "The scenic spine of the park",
+          lead: "A full day with a deliberately short stop list. If the weather turns, cut stops rather than rushing the drive.",
+          items: [
+            { time: "7:00 AM", title: "Conditions + fuel check", detail: "road status, weather, smoke, water, and a full tank." },
+            { time: "8:00 AM", title: "Leave basecamp", detail: "head west-to-east on Going-to-the-Sun Road." },
+            { time: "9:15 AM", title: "Lake McDonald pullouts", detail: "quick photos only; Logan Pass is the priority." },
+            { time: "10:00 AM", title: "Logan Pass", detail: "boardwalk as far as comfortable; use the full 2-hour window if skies are clear." },
+            { time: "12:15 PM", title: "Picnic lunch", detail: "layers on before the wind catches up with you." },
+            { time: "12:45 PM", title: "East-side overlooks", detail: "Jackson Glacier and Sunrift Gorge; keep each stop short." },
+            { time: "2:15 PM", title: "Sun Point or St. Mary Falls", detail: "choose one based on legs, weather, and parking." },
+            { time: "3:45 PM", title: "Wild Goose Island", detail: "the classic final photo stop." },
+            { time: "4:30 PM", title: "Early dinner near Rising Sun", detail: "eat before the return rather than driving hungry." },
+            { time: "5:30 PM", title: "Begin return", detail: "drive back only while you both feel alert; get home around 7:45–8:15." }
+          ]
+        }
       },
       {
         dow: "MON", date: "Sep 14", range: "home", title: "Rest day + the dinner out", sun: "↑ 7:11  ↓ 7:52",
@@ -1058,7 +1141,20 @@
           { p: "three_forks", s: "anniversary dinner — or Belton Chalet, West Glacier" }
         ],
         carry: [ { t: "nice-dinner outfit" }, { t: "swimsuit (Whitefish Lake)" } ],
-        foot: "drive under 1 hr total · on foot ~0 mi"
+        foot: "drive under 1 hr total · on foot ~0 mi",
+        timeline: {
+          title: "A real reset day",
+          lead: "This is the buffer that keeps the rest of the week easy. No park, no pressure, no early alarm.",
+          items: [
+            { time: "9:00 AM", title: "Sleep in + slow breakfast", detail: "check the knee and refresh Tuesday's weather." },
+            { time: "10:30 AM", title: "Head to Whitefish", detail: "wander downtown, browse, and choose a relaxed lunch." },
+            { time: "12:30 PM", title: "Whitefish Lake time", detail: "easy lake walk or a quiet sit by the water." },
+            { time: "2:30 PM", title: "Back to basecamp", detail: "nap, hot tub, laundry, and repack the Many Glacier daypack." },
+            { time: "4:45 PM", title: "Get ready for dinner", detail: "confirm Tuesday's plan and boat status before leaving." },
+            { time: "5:30 PM", title: "Anniversary dinner", detail: "Three Forks or Belton Chalet; linger, this is the celebration night." },
+            { time: "8:30 PM", title: "Early night", detail: "Tuesday is the long-drive day." }
+          ]
+        }
       },
       {
         dow: "TUE", date: "Sep 15", range: "far", title: "Many Glacier", sun: "↑ 7:12  ↓ 7:50",
@@ -1072,7 +1168,22 @@
           { p: "grinnell_lake", s: "+1.8 mi via 11 AM boat; short steep dock connector", opt: true }
         ],
         carry: [ { t: "boat tickets (if booked)", hot: true }, { t: "packed lunch — long day" }, { t: "knee brace + KT tape", hot: true }, { t: "extra water & snacks" }, { t: "cash for hotel lunch" } ],
-        foot: "drive ~5–5.5 hr round trip · on foot ~6.4 mi baseline · home ~7 PM"
+        foot: "drive ~5–5.5 hr round trip · on foot ~6.4 mi baseline · home ~7 PM",
+        timeline: {
+          title: "Many Glacier — baseline, no boat",
+          lead: "This is the easy, complete version. If you booked the 11 AM boat, leave at 7:15 AM instead and use the boat plan in Trip desk.",
+          items: [
+            { time: "7:00 AM", title: "Road, weather + knee check", detail: "refill water, pack lunch, confirm you still want the baseline." },
+            { time: "8:00 AM", title: "Leave basecamp", detail: "US-2 / Browning / Babb; settle in for the long scenic drive." },
+            { time: "10:30 AM", title: "Arrive at Many Glacier", detail: "park, use the restroom, bear spray on hip, start unhurried." },
+            { time: "10:45 AM", title: "Swiftcurrent Lake loop", detail: "2.6 miles, easy pace, wildlife eyes open." },
+            { time: "12:15 PM", title: "Redrock Falls", detail: "head out with a firm turn-around; this is the main walking block." },
+            { time: "2:30 PM", title: "Many Glacier Hotel lunch", detail: "hotel deck, warm drink, and a chance to reset." },
+            { time: "3:30 PM", title: "Leave the valley", detail: "do not add Grinnell Lake on the no-boat plan." },
+            { time: "6:00 PM", title: "Back near basecamp", detail: "fuel if needed, easy dinner, recovery routine." },
+            { time: "7:00 PM", title: "Home + feet up", detail: "tomorrow remains intentionally low-mileage." }
+          ]
+        }
       },
       {
         dow: "WED", date: "Sep 16", range: "mid", title: "Whitefish Mountain + Flathead Lake", sun: "↑ 7:13  ↓ 7:48",
@@ -1084,7 +1195,21 @@
           { p: "wayfarers", s: "rocky shore, short trails" }
         ],
         carry: [ { t: "swimsuit (Flathead Lake)" }, { t: "warm layer for the summit", hot: true } ],
-        foot: "drive ~1.5 hr total · on foot ~1–2 mi"
+        foot: "drive ~1.5 hr total · on foot ~1–2 mi",
+        timeline: {
+          title: "West-side scenery, low effort",
+          lead: "Your flexible smoke-buffer day. Swap it with an east-side day if visibility tells a better story.",
+          items: [
+            { time: "8:30 AM", title: "Breakfast + visibility check", detail: "compare west and east webcams before committing." },
+            { time: "9:15 AM", title: "Leave for Whitefish Mountain", detail: "bring a warm layer for the lift summit." },
+            { time: "10:00 AM", title: "Scenic lift opens", detail: "ride up, take in views, and keep the summit walk optional." },
+            { time: "12:15 PM", title: "Summit lunch", detail: "eat before descending; weather can change quickly up high." },
+            { time: "1:30 PM", title: "Head toward Bigfork", detail: "easy drive south along the lake." },
+            { time: "2:30 PM", title: "Bigfork village", detail: "coffee, galleries, or a slow waterfront stroll." },
+            { time: "4:00 PM", title: "Wayfarers State Park", detail: "short rocky-shore walk and Flathead Lake views." },
+            { time: "5:30 PM", title: "Return to basecamp", detail: "easy evening, dinner nearby, and no agenda." }
+          ]
+        }
       },
       {
         dow: "THU", date: "Sep 17", range: "mid", title: "Second west-side park day", sun: "↑ 7:15  ↓ 7:46",
@@ -1096,7 +1221,20 @@
           { p: "mcdonald_lodge", s: "slow morning + final sunset ~7:46" }
         ],
         carry: [ { t: "camera for the last sunset" } ],
-        foot: "drive ~1.5 hr total · on foot ~2–5 mi by choice"
+        foot: "drive ~1.5 hr total · on foot ~2–5 mi by choice",
+        timeline: {
+          title: "Choose-your-favorite final park day",
+          lead: "A soft landing: repeat the view you loved or catch the one you skipped. Keep the packing window protected.",
+          items: [
+            { time: "8:30 AM", title: "Final park-day check", detail: "pick one favorite, not a checklist." },
+            { time: "9:30 AM", title: "Leave basecamp", detail: "head toward Fish Creek / Lake McDonald." },
+            { time: "10:15 AM", title: "Rocky Point Trail", detail: "easy lake views and a gentle start." },
+            { time: "11:45 AM", title: "Lake McDonald Lodge", detail: "coffee, a quiet shoreline, or a laid-back lunch." },
+            { time: "1:00 PM", title: "Optional favorite repeat", detail: "Avalanche only if the knee is good; otherwise keep it scenic and flat." },
+            { time: "3:30 PM", title: "Head home", detail: "use the afternoon to pack, shower, and set out travel clothes." },
+            { time: "6:30 PM", title: "Final sunset moment", detail: "camera, a toast, and an early bedtime for the flight." }
+          ]
+        }
       },
       {
         dow: "FRI", date: "Sep 18", range: "home", title: "Departure", sun: "fly 6:00 PM",
@@ -1108,7 +1246,20 @@
           { p: "airport", s: "gas up en route" }
         ],
         carry: [ { t: "chargers + snacks for the flight" }, { t: "leave/gift the bear spray", hot: true } ],
-        foot: "drive ~1 hr total incl. airport"
+        foot: "drive ~1 hr total incl. airport",
+        timeline: {
+          title: "Departure with a cushion",
+          lead: "Stay close, leave margin for the rental return, and do not accidentally take bear spray to the airport.",
+          items: [
+            { time: "8:30 AM", title: "Pack + final sweep", detail: "chargers, fridge, laundry, door code, and bear spray plan." },
+            { time: "10:00 AM", title: "Checkout", detail: "photo the Airbnb if helpful; load the car deliberately." },
+            { time: "10:45 AM", title: "Optional Hungry Horse detour", detail: "only if everything is packed and the weather is simple." },
+            { time: "12:30 PM", title: "Lunch near Columbia Falls", detail: "keep bags and airport timing in view." },
+            { time: "2:30 PM", title: "Fuel + rental-car return", detail: "photograph the fuel gauge and leave/gift bear spray before FCA." },
+            { time: "4:30 PM", title: "At FCA / through security", detail: "water, snacks, chargers, and a calm gate buffer." },
+            { time: "6:00 PM", title: "Flight DL3798 departs", detail: "Glacier, complete." }
+          ]
+        }
       }
     ];
 
@@ -1148,7 +1299,20 @@
 
     function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]; }); }
 
-    function dayCard(day) {
+    function exactTimeline(day, index) {
+      var tl = day.timeline;
+      if (!tl) return "";
+      var rows = tl.items.map(function (item) {
+        return '<li><time>' + esc(item.time) + '</time><b>' + esc(item.title) + '</b><span class="detail">' + esc(item.detail) + '</span></li>';
+      }).join("");
+      return '<div class="day-timeline glass" id="day-timeline-' + index + '" hidden>' +
+        '<h4>' + esc(tl.title) + '</h4>' +
+        '<p>' + esc(tl.lead) + '</p>' +
+        '<ul class="timeline">' + rows + '</ul>' +
+      '</div>';
+    }
+
+    function dayCard(day, index) {
       var stopRows = day.stops.map(function (s, i) {
         var poi = POI[s.p];
         return '<div class="stop' + (s.opt ? " opt" : "") + '">' +
@@ -1169,6 +1333,11 @@
         '</div>' +
         '<div class="day-sun">' + esc(day.sun) + '</div>' +
         '<p class="day-note">' + day.note + '</p>' +
+        '<div class="day-view-toggle" role="group" aria-label="View for ' + esc(day.title) + '">' +
+          '<button type="button" data-day-view="overview" aria-controls="day-overview-' + index + '" aria-pressed="true">Overview</button>' +
+          '<button type="button" data-day-view="timeline" aria-controls="day-timeline-' + index + '" aria-pressed="false">Exact timeline</button>' +
+        '</div>' +
+        '<div class="day-overview" id="day-overview-' + index + '">' +
         '<div class="day-grid">' +
           '<div>' + pinSVG(day) + '</div>' +
           '<div class="stoplist">' + stopRows + '</div>' +
@@ -1181,11 +1350,28 @@
         '</div>' +
         '<div class="carry"><div class="lbl">Day pack</div><div class="chips">' + chips + '</div></div>' +
         '<div class="day-foot">' + esc(day.foot) + '</div>' +
+        '</div>' +
+        exactTimeline(day, index) +
       '</article>';
     }
 
     var dl = document.getElementById("days-list");
     if (dl) dl.innerHTML = DAYS.map(dayCard).join("");
+
+    document.addEventListener("click", function (e) {
+      var button = e.target.closest("button[data-day-view]");
+      if (!button) return;
+      var card = button.closest(".day");
+      var mode = button.getAttribute("data-day-view");
+      var overview = card.querySelector(".day-overview");
+      var timeline = card.querySelector(".day-timeline");
+      if (!overview || !timeline) return;
+      overview.hidden = mode !== "overview";
+      timeline.hidden = mode !== "timeline";
+      Array.prototype.slice.call(card.querySelectorAll("button[data-day-view]")).forEach(function (b) {
+        b.setAttribute("aria-pressed", String(b === button));
+      });
+    });
 
     /* ---------------- packing list ---------------- */
     var PACK = [
