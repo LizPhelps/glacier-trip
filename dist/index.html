@@ -452,6 +452,21 @@
     font-variant-numeric: tabular-nums;
   }
 
+  /* ---------------- trip journal ---------------- */
+  .journal { display: grid; gap: 1.1rem; }
+  .journal-entry { padding: clamp(1.2rem, 3vw, 1.7rem); }
+  .journal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .journal-date { font-family: var(--mono); font-size: var(--fs-xs); letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal-2); }
+  .journal-entry h3 { margin-top: 0.32rem; font-size: var(--fs-md); }
+  .journal-status { font-family: var(--mono); font-size: var(--fs-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(231, 180, 92, 0.42); background: rgba(231, 180, 92, 0.1); border-radius: 999px; padding: 0.28rem 0.6rem; white-space: nowrap; }
+  .journal-body { margin-top: 1rem; display: grid; gap: 0.75rem; max-width: var(--measure); }
+  .journal-body p { color: var(--ink-2); font-size: var(--fs-sm); }
+  .journal-body p b { color: var(--ink); font-weight: 600; }
+  .journal-highlight { margin-top: 1.1rem; padding: 0.9rem 1rem; border-left: 3px solid var(--rose); background: rgba(255, 95, 122, 0.07); border-radius: 0 12px 12px 0; }
+  .journal-highlight h4 { font-family: var(--mono); font-size: var(--fs-xs); letter-spacing: 0.1em; text-transform: uppercase; color: var(--rose-2); margin-bottom: 0.28rem; }
+  .journal-highlight p { color: var(--ink-2); font-size: var(--fs-sm); }
+  .journal-foot { margin-top: 1rem; font-family: var(--mono); font-size: var(--fs-xs); color: var(--ink-3); }
+
   /* ---------------- decision flags ---------------- */
   .flags { display: grid; gap: 1.1rem; }
   .flag { padding: clamp(1.2rem, 3vw, 1.6rem); border-left: 3px solid var(--gold); }
@@ -727,6 +742,7 @@
   <nav class="nav" id="nav">
     <a href="#passport">Passport</a>
     <a href="#days">Days</a>
+    <a href="#journal">Journal</a>
     <a href="#decisions">Decisions</a>
     <a href="#trip-desk">Trip desk</a>
     <a href="#packing">Packing</a>
@@ -761,6 +777,49 @@
       <span><span class="dot far"></span><b>FAR</b> 2 hr+ each way</span>
     </div>
     <div class="days" id="days-list"></div>
+  </section>
+
+  <section id="journal">
+    <div class="sec-head">
+      <h2>Trip journal</h2>
+      <p>The real version of the itinerary: detours, favorite views, tour-guide facts, and the little moments worth keeping.</p>
+    </div>
+    <div class="journal">
+      <article class="journal-entry glass">
+        <div class="journal-head">
+          <div>
+            <div class="journal-date">Day One &middot; Saturday, September 12</div>
+            <h3>The road made the day</h3>
+          </div>
+          <span class="journal-status">Complete</span>
+        </div>
+        <div class="journal-body">
+          <p>We left right on time around 9:00 AM, aiming for Trail of the Cedars and maybe Avalanche Lake. After thirty minutes of hunting for parking without luck, we let the plan go and followed Going-to-the-Sun Road instead.</p>
+          <p>The change of plans became the day: pull-off after pull-off, photos everywhere, the Weeping Wall, Bird Woman Falls, and one enormous mountain overlook that became our favorite stop and delivered some of our best pictures. We made it to Logan Pass, used the area to turn around, and saved the hiking for another time.</p>
+          <p>Back at Lake McDonald Lodge, we had lunch and wandered the lakefront before taking a quick car nap ahead of our 5:30 PM boat cruise. The hour on Lake McDonald came with stories about the 2018 fire, fire-resistant trees, the rainforest-like west side of the lake, and a ghostly submerged forest said to sit about 80 feet below the surface for scuba divers to see.</p>
+          <p>We also heard the road's movie connections and managed to stump our guide by asking how many trees are in Glacier National Park. No one had the answer. After the cruise, we stocked up on groceries for the week and called it a night completely exhausted.</p>
+        </div>
+        <div class="journal-highlight"><h4>Favorite moment</h4><p>That giant mountain overlook on Going-to-the-Sun Road &mdash; the view, the photos, and the feeling that the unexpected route was exactly the right one.</p></div>
+        <div class="journal-foot">A planned hike became a scenic-road day &middot; Lake McDonald boat cruise at 5:30 PM</div>
+      </article>
+
+      <article class="journal-entry glass">
+        <div class="journal-head">
+          <div>
+            <div class="journal-date">Day Two &middot; Sunday, September 13</div>
+            <h3>Rainy-day detours</h3>
+          </div>
+          <span class="journal-status">In progress</span>
+        </div>
+        <div class="journal-body">
+          <p>Rain called for a softer start: extra sleep, a slow morning, and a shift away from the original plan. We went to Whitefish Lake State Park for a look at the water, then drove through downtown Whitefish without stopping in the rain.</p>
+          <p>Next came West Glacier Village for souvenir browsing and a photo with the Glacier sign at the shops &mdash; not the national-park sign. Then we headed for Hungry Horse Dam, briefly taking the wrong address and arriving at the bottom in a service area before figuring it out and making our way back to the top.</p>
+          <p>We returned to basecamp for burgers and an easy hangout while the day was still unfolding.</p>
+        </div>
+        <div class="journal-highlight"><h4>Plot twist</h4><p>Accidentally finding the bottom of Hungry Horse Dam first, then navigating our way back up to the overlook.</p></div>
+        <div class="journal-foot">Still to come &middot; add any evening plans, favorite moment, food, and final feeling when the day is done</div>
+      </article>
+    </div>
   </section>
 
   <section id="decisions">
