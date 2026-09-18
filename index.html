@@ -177,6 +177,8 @@
     background: linear-gradient(150deg, rgba(255, 95, 122, 0.9), rgba(255, 147, 164, 0.55));
     box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
   }
+  .tab-panel[hidden], .tab-aux[hidden] { display: none !important; }
+  .tab-panel { min-height: min(72vh, 860px); }
 
   section { margin-top: clamp(3rem, 7vw, 4.5rem); scroll-margin-top: 92px; }
 
@@ -749,20 +751,20 @@
 <body>
 
 <div class="nav-shell">
-  <nav class="nav" id="nav">
-    <a href="#passport">Passport</a>
-    <a href="#journal">Journal</a>
-    <a href="#days">Plan</a>
-    <a href="#decisions">Decisions</a>
-    <a href="#trip-desk">Trip desk</a>
-    <a href="#packing">Packing</a>
-    <a href="#prep">Prep</a>
+  <nav class="nav" id="nav" role="tablist" aria-label="Trip dashboard sections">
+    <a id="tab-passport" href="#passport" role="tab" aria-controls="passport" data-tab="passport">Passport</a>
+    <a id="tab-journal" href="#journal" role="tab" aria-controls="journal" data-tab="journal">Journal</a>
+    <a id="tab-days" href="#days" role="tab" aria-controls="days" data-tab="days">Plan</a>
+    <a id="tab-decisions" href="#decisions" role="tab" aria-controls="decisions" data-tab="decisions">Decisions</a>
+    <a id="tab-trip-desk" href="#trip-desk" role="tab" aria-controls="trip-desk" data-tab="trip-desk">Trip desk</a>
+    <a id="tab-packing" href="#packing" role="tab" aria-controls="packing" data-tab="packing">Packing</a>
+    <a id="tab-prep" href="#prep" role="tab" aria-controls="prep" data-tab="prep">Prep</a>
   </nav>
 </div>
 
 <div class="wrap">
 
-  <header class="passport glass" id="passport">
+  <header class="passport glass tab-panel" id="passport" role="tabpanel" tabindex="0" aria-labelledby="tab-passport">
     <p class="eyebrow">Anniversary Trip &middot; Sept 11&ndash;18, 2026</p>
     <h1 class="grad">Glacier<br />Anniversary</h1>
     <p class="sub">Seven days at Glacier National Park, Montana. One basecamp in Columbia Falls, an easy pace, scenery over trail miles.</p>
@@ -776,7 +778,7 @@
     </dl>
   </header>
 
-  <section id="journal">
+  <section class="tab-panel" id="journal" role="tabpanel" tabindex="0" aria-labelledby="tab-journal">
     <div class="sec-head">
       <h2>Trip journal</h2>
       <p>The real version of the itinerary: detours, favorite views, tour-guide facts, and the little moments worth keeping.</p>
@@ -913,12 +915,12 @@
     </div>
   </section>
 
-  <div class="trip-divider" role="separator" aria-label="Pre-trip planning archive">
+  <div class="trip-divider tab-aux" role="separator" aria-label="Pre-trip planning archive" data-tab-aux="days">
     <strong>Pre-trip planning archive</strong>
     <p>The journal above is what happened. The itinerary, decisions, and packing notes below are the plan we started with.</p>
   </div>
 
-  <section id="days">
+  <section class="tab-panel" id="days" role="tabpanel" tabindex="0" aria-labelledby="tab-days">
     <div class="sec-head">
       <h2>Pre-trip itinerary</h2>
       <p>The original plan, maps, and target timings &mdash; kept as the record of the trip before it happened.</p>
@@ -931,7 +933,7 @@
     <div class="days" id="days-list"></div>
   </section>
 
-  <section id="decisions">
+  <section class="tab-panel" id="decisions" role="tabpanel" tabindex="0" aria-labelledby="tab-decisions">
     <div class="sec-head">
       <h2>Open decisions</h2>
       <p>Two calls still to make, each with a hard "decide by" so a booking window doesn't close.</p>
@@ -975,7 +977,7 @@
     </div>
   </section>
 
-  <section id="trip-desk">
+  <section class="tab-panel" id="trip-desk" role="tabpanel" tabindex="0" aria-labelledby="tab-trip-desk">
     <div class="sec-head">
       <h2>Trip desk</h2>
       <p>Everything that prevents a small hiccup from becoming a lost day. Work through this before Friday, then use the morning check before each park day.</p>
@@ -1036,7 +1038,7 @@
     </div>
   </section>
 
-  <section id="packing">
+  <section class="tab-panel" id="packing" role="tabpanel" tabindex="0" aria-labelledby="tab-packing">
     <div class="sec-head">
       <h2>Packing &mdash; carry-on only</h2>
       <p>One roller + one daypack each (the daypack is your plane personal item and your trail bag). Tap to check off, add your own, delete what you overrule. Saved on this device.</p>
@@ -1061,7 +1063,7 @@
     <div class="pack-cats" id="pack-cats"></div>
   </section>
 
-  <section id="prep">
+  <section class="tab-panel" id="prep" role="tabpanel" tabindex="0" aria-labelledby="tab-prep">
     <div class="sec-head">
       <h2>Plan around</h2>
       <p>Alpine weather, a fire-season wildcard, and a rental we'd like to return unscratched.</p>
@@ -1721,17 +1723,45 @@
       });
     });
 
-    /* ---------------- nav scroll-spy ---------------- */
-    var links = Array.prototype.slice.call(document.querySelectorAll("#nav a"));
-    var secs = links.map(function (a) { return document.querySelector(a.getAttribute("href")); });
-    function spy() {
-      var y = window.scrollY + 120;
-      var idx = 0;
-      for (var i = 0; i < secs.length; i++) { if (secs[i] && secs[i].offsetTop <= y) idx = i; }
-      links.forEach(function (a, i) { a.classList.toggle("on", i === idx); });
+    /* ---------------- section tabs ---------------- */
+    var tabs = Array.prototype.slice.call(document.querySelectorAll("#nav [data-tab]"));
+    var panels = Array.prototype.slice.call(document.querySelectorAll(".tab-panel"));
+    var tabExtras = Array.prototype.slice.call(document.querySelectorAll("[data-tab-aux]"));
+
+    function activateTab(id, updateHash) {
+      var valid = tabs.some(function (tab) { return tab.getAttribute("data-tab") === id; });
+      var active = valid ? id : "journal";
+      panels.forEach(function (panel) { panel.hidden = panel.id !== active; });
+      tabExtras.forEach(function (extra) { extra.hidden = extra.getAttribute("data-tab-aux") !== active; });
+      tabs.forEach(function (tab) {
+        var selected = tab.getAttribute("data-tab") === active;
+        tab.classList.toggle("on", selected);
+        tab.setAttribute("aria-selected", String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+      });
+      if (updateHash && location.hash !== "#" + active) history.pushState(null, "", "#" + active);
     }
-    window.addEventListener("scroll", spy, { passive: true });
-    spy();
+
+    tabs.forEach(function (tab, index) {
+      tab.addEventListener("click", function (e) {
+        e.preventDefault();
+        activateTab(tab.getAttribute("data-tab"), true);
+      });
+      tab.addEventListener("keydown", function (e) {
+        if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) return;
+        e.preventDefault();
+        var next = index;
+        if (e.key === "ArrowLeft") next = (index - 1 + tabs.length) % tabs.length;
+        if (e.key === "ArrowRight") next = (index + 1) % tabs.length;
+        if (e.key === "Home") next = 0;
+        if (e.key === "End") next = tabs.length - 1;
+        tabs[next].focus();
+        activateTab(tabs[next].getAttribute("data-tab"), true);
+      });
+    });
+
+    window.addEventListener("hashchange", function () { activateTab(location.hash.slice(1), false); });
+    activateTab(location.hash.slice(1) || "journal", false);
   })();
 </script>
 </body>
