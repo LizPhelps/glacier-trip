@@ -915,15 +915,15 @@
     </div>
   </section>
 
-  <div class="trip-divider tab-aux" role="separator" aria-label="Pre-trip planning archive" data-tab-aux="days">
-    <strong>Pre-trip planning archive</strong>
-    <p>The journal above is what happened. The itinerary, decisions, and packing notes below are the plan we started with.</p>
+  <div class="trip-divider tab-aux" role="separator" aria-label="Journal-matched trip plan" data-tab-aux="days">
+    <strong>Journal-matched trip plan</strong>
+    <p>The Plan tab now follows the trip as it actually happened, with approximate timing reconstructed from the journal.</p>
   </div>
 
   <section class="tab-panel" id="days" role="tabpanel" tabindex="0" aria-labelledby="tab-days">
     <div class="sec-head">
-      <h2>Pre-trip itinerary</h2>
-      <p>The original plan, maps, and target timings &mdash; kept as the record of the trip before it happened.</p>
+      <h2>What we actually did</h2>
+      <p>The corrected day-by-day schedule, approximate timing, real stops, and Google Maps driving routes.</p>
     </div>
     <div class="range-key">
       <span><span class="dot home"></span><b>HOME</b> under 30 min out</span>
@@ -1131,8 +1131,8 @@
   </section>
 
   <footer>
-    Assembled Sep 5, 2026 &middot; drive times, daylight, and mileage are estimates &mdash; reconfirm road, fire, and boat status at nps.gov/glac before each day.<br />
-    Basecamp: 556 Windy Acres Dr, Columbia Falls, MT 59912 &middot; packing checkboxes save to this browser only &middot; maps are schematic &mdash; use the Google Maps link to navigate.
+    Schedule corrected Sep 18, 2026 &middot; approximate times and drive durations were reconstructed from the completed trip journal.<br />
+    Basecamp: 556 Windy Acres Dr, Columbia Falls, MT 59912 &middot; packing checkboxes save to this browser only &middot; maps are schematic &mdash; each Google Maps link follows the recorded driving legs.
   </footer>
 
 </div>
@@ -1190,19 +1190,28 @@
       whitefish_town: { n: "Downtown Whitefish",              x: 105, y: 415, q: "Downtown Whitefish, MT" },
       whitefish_lake: { n: "Whitefish Lake State Park",       x: 92,  y: 405, q: "Whitefish Lake State Park, MT" },
       whitefish_mtn:  { n: "Whitefish Mountain Resort",       x: 100, y: 388, q: "Whitefish Mountain Resort, Whitefish, MT" },
+      craggy_range:   { n: "Craggy Range Bar & Grill",         x: 106, y: 416, q: "Craggy Range Bar & Grill, Whitefish, MT" },
+      whitefish_coffee:{ n: "Coffee stop in Whitefish",        x: 106, y: 416, q: "Downtown Whitefish, MT" },
+      whitefish_pizza:{ n: "Pizza in Whitefish",               x: 106, y: 416, q: "Downtown Whitefish, MT" },
       bigfork:        { n: "Bigfork village",                 x: 140, y: 520, q: "Bigfork, MT" },
       wayfarers:      { n: "Wayfarers State Park",            x: 150, y: 515, q: "Wayfarers State Park, Bigfork, MT" },
+      harbor_grille:  { n: "Harbor Grille — Flathead Lake",   x: 112, y: 538, q: "Harbor Grille, Lakeside, MT" },
       hungry_horse:   { n: "Hungry Horse Dam",                x: 185, y: 452, q: "Hungry Horse Dam, MT" },
+      west_glacier:   { n: "West Glacier Village",            x: 196, y: 365, q: "West Glacier Village, West Glacier, MT" },
+      west_sign:      { n: "Glacier National Park entrance sign", x: 194, y: 360, q: "Glacier National Park West Entrance, West Glacier, MT" },
       apgar:          { n: "Apgar Village & Visitor Center",  x: 200, y: 358, q: "Apgar Visitor Center, West Glacier, MT" },
       mcdonald_lodge: { n: "Lake McDonald Lodge",             x: 232, y: 330, q: "Lake McDonald Lodge, Montana" },
       cedars:         { n: "Trail of the Cedars",             x: 252, y: 314, q: "Trail of the Cedars, Glacier National Park" },
       avalanche:      { n: "Avalanche Lake Trailhead",        x: 256, y: 310, q: "Avalanche Lake Trailhead, Glacier National Park" },
       the_loop:       { n: "The Loop",                        x: 300, y: 288, q: "The Loop, Going-to-the-Sun Road, Glacier National Park" },
       bird_woman:     { n: "Bird Woman Falls Overlook",       x: 328, y: 270, q: "Bird Woman Falls Overlook, Going-to-the-Sun Road, MT" },
+      weeping_wall:   { n: "The Weeping Wall",                x: 318, y: 278, q: "Weeping Wall, Going-to-the-Sun Road, Montana" },
+      oberlin_bend:   { n: "Favorite pullout near Mount Oberlin", x: 346, y: 258, q: "Oberlin Bend, Going-to-the-Sun Road, Montana" },
       logan_pass:     { n: "Logan Pass + Hidden Lake",        x: 357, y: 255, q: "Logan Pass Visitor Center, Montana" },
       jackson:        { n: "Jackson Glacier Overlook",        x: 400, y: 270, q: "Jackson Glacier Overlook, Going-to-the-Sun Road, MT" },
       sunrift:        { n: "Sunrift Gorge",                   x: 430, y: 277, q: "Sunrift Gorge, Glacier National Park" },
       sun_point:      { n: "Sun Point",                       x: 460, y: 281, q: "Sun Point, Glacier National Park" },
+      baring_falls:   { n: "Baring Falls",                    x: 454, y: 279, q: "Baring Falls, Glacier National Park" },
       stmary_falls:   { n: "St. Mary Falls Trailhead",        x: 490, y: 284, q: "St. Mary Falls Trailhead, Glacier National Park" },
       wild_goose:     { n: "Wild Goose Island Lookout",       x: 520, y: 285, q: "Wild Goose Island Overlook, Montana" },
       rising_sun:     { n: "Rising Sun",                      x: 550, y: 287, q: "Rising Sun, Glacier National Park, MT" },
@@ -1218,7 +1227,7 @@
 
     var BASE_CARRY = "water 2L · snacks · puffy · rain shell · warm hat · sun kit · bear spray · offline map · headlamp · blister kit · cash";
 
-    var DAYS = [
+    var PRETRIP_DAYS = [
       {
         dow: "FRI", date: "Sep 11", range: "home", title: "Arrival", sun: "land 11:43 PM",
         note: "Land at FCA on <b>Delta DL1098</b>, grab the rental, ~20 min to the Airbnb. Straight to bed — the trip starts Saturday.",
@@ -1433,20 +1442,250 @@
       }
     ];
 
+    /*
+      Corrected schedule reconstructed from the completed trip journal.
+      A leading "~" marks an approximate time; exact times are retained where
+      the journal recorded them.
+    */
+    var DAYS = [
+      {
+        dow: "FRI", date: "Sep 11", range: "home", title: "Arrival + basecamp", sun: "land 11:43 PM",
+        note: "Late arrival at FCA, rental pickup, and the short drive to the Columbia Falls basecamp.",
+        stops: [
+          { p: "airport", s: "Delta DL1098 landed 11:43 PM" },
+          { p: "basecamp", s: "rental drop-in, then straight to bed" }
+        ],
+        driveStops: [ "airport", "basecamp" ],
+        highlights: [ "late arrival", "rental pickup", "basecamp check-in" ],
+        foot: "drive ~20 min · on foot 0 mi",
+        timeline: {
+          title: "Late-night arrival",
+          lead: "The exact landing time is known; the rest of the arrival timing is approximate.",
+          items: [
+            { time: "11:43 PM", title: "Land at FCA", detail: "Delta DL1098 arrives at Glacier Park International Airport." },
+            { time: "~12:10 AM", title: "Pick up the rental", detail: "Collect bags, photograph the car, and load up." },
+            { time: "~12:35 AM", title: "Leave the airport", detail: "Drive directly to the Airbnb with no late-night errands." },
+            { time: "~12:55 AM", title: "Reach basecamp", detail: "Settle into 556 Windy Acres Drive in Columbia Falls." }
+          ]
+        }
+      },
+      {
+        dow: "SAT", date: "Sep 12", range: "mid", title: "Going-to-the-Sun Road + Lake McDonald", sun: "out 9:00 AM",
+        note: "Trailhead parking was full, so the planned hike became a scenic drive to Logan Pass, followed by lunch, lake time, and the <b>5:30 PM Lake McDonald boat cruise</b>.",
+        stops: [
+          { p: "avalanche", s: "about 30 minutes looking for parking" },
+          { p: "weeping_wall", s: "roadside scenery and photos" },
+          { p: "bird_woman", s: "waterfall overlook" },
+          { p: "oberlin_bend", s: "favorite mountain-view photo stop" },
+          { p: "logan_pass", s: "turnaround point" },
+          { p: "mcdonald_lodge", s: "lunch, lakefront, car nap, 5:30 PM cruise" },
+          { p: "basecamp", s: "groceries on the way home" }
+        ],
+        driveStops: [ "basecamp", "avalanche", "weeping_wall", "bird_woman", "oberlin_bend", "logan_pass", "mcdonald_lodge", "basecamp" ],
+        highlights: [ "scenic reroute", "favorite overlook", "5:30 PM boat", "grocery stop" ],
+        foot: "drive ~3–4 hr including the scenic road · light walking",
+        timeline: {
+          title: "Scenic-road day",
+          lead: "The journal fixes the 9:00 AM departure and 5:30 PM cruise; middle-of-day times are reconstructed.",
+          items: [
+            { time: "9:00 AM", title: "Leave basecamp", detail: "Head for Trail of the Cedars and Avalanche Lake." },
+            { time: "~9:45 AM", title: "Search for trailhead parking", detail: "Circle for roughly 30 minutes, then let the hiking plan go." },
+            { time: "~10:15 AM", title: "Continue up Going-to-the-Sun Road", detail: "Stop at the Weeping Wall, Bird Woman Falls, and scenic pullouts." },
+            { time: "~12:00 PM", title: "Reach Logan Pass", detail: "Use the pass as the turnaround and save the hikes for later." },
+            { time: "~2:00 PM", title: "Lake McDonald Lodge", detail: "Have lunch, wander the lakefront, and take a quick car nap." },
+            { time: "5:30 PM", title: "Lake McDonald boat cruise", detail: "Spend an hour on the lake with the guide and park stories." },
+            { time: "~6:45 PM", title: "Groceries", detail: "Stock up for the week on the return toward Columbia Falls." },
+            { time: "~8:00 PM", title: "Back at basecamp", detail: "Call it an early night after the long first day." }
+          ]
+        }
+      },
+      {
+        dow: "SUN", date: "Sep 13", range: "mid", title: "Rainy Whitefish + Hungry Horse reset", sun: "slow morning",
+        note: "Rain changed the plan: Whitefish Lake, a drive through downtown, souvenirs in West Glacier, the accidental lower-dam detour, then a relaxed afternoon at basecamp.",
+        stops: [
+          { p: "whitefish_lake", s: "quick look at the water" },
+          { p: "whitefish_town", s: "rainy drive-through" },
+          { p: "west_glacier", s: "souvenirs and the shop-area Glacier sign" },
+          { p: "hungry_horse", s: "wrong turn to the lower service area, then the top" },
+          { p: "basecamp", s: "burgers, RedZone, and Montana-opoly" }
+        ],
+        driveStops: [ "basecamp", "whitefish_lake", "whitefish_town", "west_glacier", "hungry_horse", "basecamp" ],
+        highlights: [ "rainy reset", "portable-stove burgers", "RedZone", "Liz wins Montana-opoly" ],
+        foot: "drive ~2–3 hr total · light walking",
+        timeline: {
+          title: "Rainy-day detours",
+          lead: "The journal gives the order but not clock times, so this day is intentionally approximate.",
+          items: [
+            { time: "~9:30 AM", title: "Slow rainy morning", detail: "Sleep in, have breakfast, and trade the original plan for a softer day." },
+            { time: "~10:30 AM", title: "Whitefish Lake State Park", detail: "Stop for a look at the lake in the rain." },
+            { time: "~11:15 AM", title: "Downtown Whitefish", detail: "Drive through without stopping because of the weather." },
+            { time: "~12:00 PM", title: "West Glacier Village", detail: "Browse souvenirs and take the Glacier sign photo by the shops." },
+            { time: "~1:15 PM", title: "Hungry Horse Dam detour", detail: "Land at the lower service area first, then find the route to the top." },
+            { time: "~3:00 PM", title: "Return to basecamp", detail: "Make bacon cheeseburgers on the portable stove after the grill refuses to start." },
+            { time: "~4:30 PM", title: "Football + game night", detail: "Watch Week One RedZone with beer and cider, then play Montana-opoly." },
+            { time: "~9:00 PM", title: "Early night", detail: "Turn in ahead of Monday's Avalanche Lake start." }
+          ]
+        }
+      },
+      {
+        dow: "MON", date: "Sep 14", range: "mid", title: "Avalanche Lake in the rain", sun: "out 7:00 AM",
+        note: "An early start secured one of the final trailhead spaces. Trail of the Cedars and Avalanche Lake came with <b>45-degree rain</b>, followed by Apgar, Fish Creek scouting, and the west entrance sign.",
+        stops: [
+          { p: "cedars", s: "Trail of the Cedars approach" },
+          { p: "avalanche", s: "about 2 hours up and 1 hour down" },
+          { p: "apgar", s: "village and lake stop after the road closure" },
+          { p: "rocky_point", s: "Fish Creek and Rocky Point scouting" },
+          { p: "west_sign", s: "classic park entrance photo" },
+          { p: "basecamp", s: "Selah, grilled sausages, and a warm reset" }
+        ],
+        driveStops: [ "basecamp", "avalanche", "apgar", "rocky_point", "west_sign", "basecamp" ],
+        highlights: [ "45°F + rain", "one of the last parking spots", "road closure", "Selah + salted Oreo" ],
+        foot: "drive ~1.5 hr total · hike ~5.5 mi",
+        timeline: {
+          title: "Cold rain, clear reward",
+          lead: "Wake-up, departure, hiking durations, and the 4:00 PM warm-up are journal-based.",
+          items: [
+            { time: "6:30 AM", title: "Wake up", detail: "Layer up for a cold, wet trail day." },
+            { time: "7:00 AM", title: "Leave basecamp", detail: "Drive straight to the Avalanche trailhead." },
+            { time: "~7:45 AM", title: "Claim a final parking spot", detail: "Start through Trail of the Cedars before the lot fills." },
+            { time: "~8:00 AM", title: "Hike to Avalanche Lake", detail: "Climb for roughly two hours in 45-degree rain." },
+            { time: "~10:00 AM", title: "Avalanche Lake", detail: "Take photos, watch birds and chipmunks, and catch your breath." },
+            { time: "~10:30 AM", title: "Hike back", detail: "Return in about an hour as the weather begins to clear." },
+            { time: "~11:45 AM", title: "Road closure escort", detail: "Rangers begin moving visitors back out of the park." },
+            { time: "~12:15 PM", title: "Apgar + Fish Creek", detail: "Visit the lake, scout Rocky Point, and stop at the west entrance sign." },
+            { time: "~2:30 PM", title: "Back at basecamp", detail: "Warm up with Selah nearby while the sausages grill." },
+            { time: "4:00 PM", title: "Finally warm inside", detail: "Reset, then make an evening ice-cream run for salted Oreo." }
+          ]
+        }
+      },
+      {
+        dow: "TUE", date: "Sep 15", range: "far", title: "St. Mary + Many Glacier + reopened road", sun: "out 5:00 AM",
+        note: "The biggest day: an east-side waterfall hike, Jackson Glacier, a bear in Many Glacier, then a last-minute westbound drive across Going-to-the-Sun Road after it reopened at <b>1:30 PM</b>.",
+        stops: [
+          { p: "wild_goose", s: "early-morning overlook" },
+          { p: "stmary_falls", s: "limited parking, two moose, Baring Falls, and St. Mary Falls" },
+          { p: "jackson", s: "road-closure check and glacier view" },
+          { p: "mg_hotel", s: "drive-through valley visit and bear sighting" },
+          { p: "logan_pass", s: "fresh snow on the reopened return" },
+          { p: "basecamp", s: "cheeseburgers, TV, and Dairy Queen" }
+        ],
+        driveStops: [ "basecamp", "wild_goose", "stmary_falls", "jackson", "mg_hotel", "stmary_town", "logan_pass", "mcdonald_lodge", "basecamp" ],
+        highlights: [ "5:00 AM start", "two moose + a bear", "1:30 PM reopening", "fresh snow", "Dairy Queen" ],
+        foot: "drive ~6–7 hr total · hike ~4 mi",
+        timeline: {
+          title: "Closed road, open day",
+          lead: "The 5:00 AM departure and 1:30 PM reopening are exact; other times follow the journal's sequence.",
+          items: [
+            { time: "5:00 AM", title: "Leave basecamp", detail: "Take US-2 through Browning and the reservation toward the east side." },
+            { time: "~7:30 AM", title: "Wild Goose Island Overlook", detail: "Pause for the view before the trailhead." },
+            { time: "~7:50 AM", title: "St. Mary trailhead", detail: "Take one of the limited spaces and start hiking." },
+            { time: "~8:15 AM", title: "Moose + Baring Falls", detail: "Spot two distant moose, then continue through the tougher miles to Baring Falls." },
+            { time: "~10:15 AM", title: "St. Mary Falls", detail: "Reach the larger waterfall, then return to the car." },
+            { time: "~11:30 AM", title: "Packed lunch", detail: "Eat sandwiches at the car before driving west." },
+            { time: "~12:00 PM", title: "Jackson Glacier Overlook", detail: "Confirm the road is still closed, then pivot to Many Glacier." },
+            { time: "~1:00 PM", title: "Many Glacier", detail: "Drive the rough entrance road, cruise the full lot and valley, and see a bear at a pullout." },
+            { time: "1:30 PM", title: "Going-to-the-Sun Road reopens", detail: "Check the status and choose the reopened road for the return." },
+            { time: "~2:15 PM", title: "Start the westbound crossing", detail: "Re-enter near St. Mary and drive the full road with fresh snow on the mountains." },
+            { time: "~6:30 PM", title: "Back at basecamp", detail: "Grill cheeseburgers, watch TV, and finish with Dairy Queen Blizzards." }
+          ]
+        }
+      },
+      {
+        dow: "WED", date: "Sep 16", range: "mid", title: "Whitefish + mountain chairlift", sun: "slow morning",
+        note: "A recovery morning led into downtown Whitefish, lunch at Craggy Range, and the Whitefish Mountain chairlift — complete with deer and a bear below the lift.",
+        stops: [
+          { p: "whitefish_town", s: "walk around the center of town" },
+          { p: "craggy_range", s: "fried chicken and steak-and-cheese lunch" },
+          { p: "whitefish_mtn", s: "chairlift to the summit, deer, and a bear" },
+          { p: "basecamp", s: "hammock time with Selah and an early night" }
+        ],
+        driveStops: [ "basecamp", "whitefish_town", "craggy_range", "whitefish_mtn", "basecamp" ],
+        highlights: [ "slow morning", "Craggy Range lunch", "bear under the lift", "Selah hammock time" ],
+        foot: "drive ~2 hr total · easy town and summit walking",
+        timeline: {
+          title: "Whitefish, wild lift ride",
+          lead: "The journal records the order rather than exact clock times.",
+          items: [
+            { time: "~9:30 AM", title: "Sleep in + breakfast", detail: "Recover from the previous day's early start and long miles." },
+            { time: "~11:00 AM", title: "Downtown Whitefish", detail: "Walk around the center of town without rushing." },
+            { time: "~12:00 PM", title: "Lunch at Craggy Range", detail: "Fried chicken sandwich for Nick; steak-and-cheese with beef dip for Liz." },
+            { time: "~1:30 PM", title: "Whitefish Mountain Resort", detail: "Buy chairlift tickets and ride to the summit." },
+            { time: "~2:00 PM", title: "Wildlife from the lift", detail: "See several deer and the trip's second bear directly below." },
+            { time: "~4:30 PM", title: "Back at basecamp", detail: "Relax with Selah by the hammock and keep the evening easy." },
+            { time: "~9:00 PM", title: "Early night", detail: "Turn in before Thursday's Logan Pass start." }
+          ]
+        }
+      },
+      {
+        dow: "THU", date: "Sep 17", range: "mid", title: "Logan Pass hiking + Whitefish pizza", sun: "up 6:00 AM",
+        note: "A bright final park day: Hidden Lake Overlook, a quieter viewpoint, a half-mile taste of the Highline Trail, favorite roadside stops, then pizza and packing in Whitefish.",
+        stops: [
+          { p: "logan_pass", s: "last-minute parking, Hidden Lake Overlook, and a Highline Trail sampler" },
+          { p: "oberlin_bend", s: "favorite roadside stop near Mount Oberlin" },
+          { p: "west_sign", s: "one more entrance-sign stop" },
+          { p: "basecamp", s: "lunch, showers, and recovery" },
+          { p: "whitefish_pizza", s: "pizza, then home to pack" }
+        ],
+        driveStops: [ "basecamp", "logan_pass", "oberlin_bend", "west_sign", "basecamp", "whitefish_pizza", "basecamp" ],
+        highlights: [ "three deer on the trail", "Hidden Lake Overlook", "Highline sampler", "pizza + packing" ],
+        foot: "drive ~3–4 hr total · hike ~4 mi",
+        timeline: {
+          title: "Logan Pass, up close",
+          lead: "The 6:00 AM wake-up is exact; the rest is an approximate reconstruction.",
+          items: [
+            { time: "6:00 AM", title: "Wake up + breakfast", detail: "Get ready for the final full park day." },
+            { time: "~6:40 AM", title: "Leave for Logan Pass", detail: "Drive Going-to-the-Sun Road on a bright, clear morning." },
+            { time: "~8:15 AM", title: "Find a parking space", detail: "Circle the lot and get in just before it closes to new arrivals." },
+            { time: "~8:30 AM", title: "Hidden Lake Trail", detail: "Start with three deer running across the trail." },
+            { time: "~10:00 AM", title: "Hidden Lake Overlook", detail: "Continue briefly toward the lake, then stop at a quieter viewpoint." },
+            { time: "~11:15 AM", title: "Highline Trail sampler", detail: "Walk the first half-mile, use the hand cable, and turn around after the road-above view." },
+            { time: "~12:30 PM", title: "Roadside favorites", detail: "Pause near Mount Oberlin and revisit the west entrance sign." },
+            { time: "~2:00 PM", title: "Basecamp reset", detail: "Have lunch, shower, and recover." },
+            { time: "~5:30 PM", title: "Pizza in Whitefish", detail: "Eat in town, then return to relax and pack for checkout." }
+          ]
+        }
+      },
+      {
+        dow: "FRI", date: "Sep 18", range: "mid", title: "Flathead Lake + departure", sun: "FCA 3:30 PM",
+        note: "After checkout: coffee frappes in Whitefish, a final Flathead Lake lunch at Harbor Grille, and an early airport arrival for the <b>6:00 PM flight</b>.",
+        stops: [
+          { p: "basecamp", s: "checkout and load the car" },
+          { p: "whitefish_coffee", s: "coffee frappes" },
+          { p: "harbor_grille", s: "salads and chicken tenders by Flathead Lake" },
+          { p: "airport", s: "arrived around 3:30 PM" }
+        ],
+        driveStops: [ "basecamp", "whitefish_coffee", "harbor_grille", "airport" ],
+        highlights: [ "Whitefish frappes", "Flathead Lake", "Harbor Grille", "FCA at 3:30 PM" ],
+        foot: "drive ~2.5 hr total · light walking",
+        timeline: {
+          title: "One last lake, then home",
+          lead: "Airport arrival and departure are exact; the morning and lunch times are approximate.",
+          items: [
+            { time: "~10:00 AM", title: "Checkout", detail: "Finish packing, load the rental, and leave the Airbnb." },
+            { time: "~10:30 AM", title: "Coffee frappes in Whitefish", detail: "Make the final easy stop in town." },
+            { time: "~11:30 AM", title: "Drive to Flathead Lake", detail: "Head south for one last Montana lake view." },
+            { time: "~12:30 PM", title: "Lunch at Harbor Grille", detail: "Order salads and chicken tenders and enjoy the relaxed finish." },
+            { time: "~2:15 PM", title: "Leave for FCA", detail: "Drive north, fuel the rental if needed, and head for the terminal." },
+            { time: "3:30 PM", title: "Arrive at FCA", detail: "Return the car and settle in with plenty of time." },
+            { time: "6:00 PM", title: "Flight departs", detail: "Fly through Salt Lake City, then take the red-eye to Boston." }
+          ]
+        }
+      }
+    ];
+
     function enc(s) { return encodeURIComponent(s); }
 
     function gmapsHref(day) {
-      var qs = day.stops.map(function (s) { return POI[s.p].q; });
-      if (day.loop) {
-        var home = POI.basecamp.q;
-        var mids = qs.slice(0, 9).map(enc).join("|");
-        return "https://www.google.com/maps/dir/?api=1&travelmode=driving&origin=" + enc(home) +
-               "&destination=" + enc(home) + "&waypoints=" + mids;
-      }
+      var keys = day.driveStops || day.stops.map(function (s) { return s.p; });
+      var qs = keys.map(function (key) { return POI[key].q; });
       if (qs.length < 2) return "https://www.google.com/maps/search/?api=1&query=" + enc(qs[0] || "Glacier National Park");
-      return "https://www.google.com/maps/dir/?api=1&travelmode=driving&origin=" + enc(qs[0]) +
-             "&destination=" + enc(qs[qs.length - 1]) +
-             (qs.length > 2 ? "&waypoints=" + qs.slice(1, -1).map(enc).join("|") : "");
+      var params = new URLSearchParams();
+      params.set("api", "1");
+      params.set("travelmode", "driving");
+      params.set("origin", qs[0]);
+      params.set("destination", qs[qs.length - 1]);
+      if (qs.length > 2) params.set("waypoints", qs.slice(1, -1).join("|"));
+      return "https://www.google.com/maps/dir/?" + params.toString();
     }
 
     function pinSVG(day) {
@@ -1491,9 +1730,9 @@
                '</div>';
       }).join("");
 
-      var chips = [ '<span class="chip">base kit: ' + esc(BASE_CARRY) + '</span>' ].concat(
-        (day.carry || []).map(function (c) { return '<span class="chip' + (c.hot ? " hot" : "") + '">+ ' + esc(c.t) + '</span>'; })
-      ).join("");
+      var chips = (day.highlights || []).map(function (item) {
+        return '<span class="chip">' + esc(item) + '</span>';
+      }).join("");
 
       return '<article class="day glass" data-range="' + day.range + '">' +
         '<div class="day-head">' +
@@ -1505,7 +1744,7 @@
         '<p class="day-note">' + day.note + '</p>' +
         '<div class="day-view-toggle" role="group" aria-label="View for ' + esc(day.title) + '">' +
           '<button type="button" data-day-view="overview" aria-controls="day-overview-' + index + '" aria-pressed="true">Overview</button>' +
-          '<button type="button" data-day-view="timeline" aria-controls="day-timeline-' + index + '" aria-pressed="false">Exact timeline</button>' +
+          '<button type="button" data-day-view="timeline" aria-controls="day-timeline-' + index + '" aria-pressed="false">Approx. timing</button>' +
         '</div>' +
         '<div class="day-overview" id="day-overview-' + index + '">' +
         '<div class="day-grid">' +
@@ -1515,10 +1754,10 @@
         '<div class="day-tools">' +
           '<a class="gmaps-btn" href="' + gmapsHref(day) + '" target="_blank" rel="noopener">' +
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>' +
-            'Open in Google Maps' +
+            'Open actual drive in Google Maps' +
           '</a>' +
         '</div>' +
-        '<div class="carry"><div class="lbl">Day pack</div><div class="chips">' + chips + '</div></div>' +
+        '<div class="carry"><div class="lbl">Day notes</div><div class="chips">' + chips + '</div></div>' +
         '<div class="day-foot">' + esc(day.foot) + '</div>' +
         '</div>' +
         exactTimeline(day, index) +
