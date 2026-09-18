@@ -184,6 +184,16 @@
   .sec-head h2 { font-size: var(--fs-lg); letter-spacing: -0.02em; }
   .sec-head p { margin-top: 0.5rem; color: var(--ink-2); font-size: var(--fs-sm); max-width: 46ch; }
 
+  .trip-divider {
+    margin-top: clamp(3.5rem, 8vw, 5.5rem);
+    padding: 1.35rem 0;
+    text-align: center;
+    border-top: 1px solid var(--edge);
+    border-bottom: 1px solid var(--edge);
+  }
+  .trip-divider strong { display: block; font-family: var(--mono); font-size: var(--fs-xs); letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
+  .trip-divider p { margin: 0.4rem auto 0; max-width: 52ch; color: var(--ink-3); font-size: var(--fs-sm); }
+
   /* ---------------- passport header ---------------- */
   .passport {
     position: relative;
@@ -741,8 +751,8 @@
 <div class="nav-shell">
   <nav class="nav" id="nav">
     <a href="#passport">Passport</a>
-    <a href="#days">Days</a>
     <a href="#journal">Journal</a>
+    <a href="#days">Plan</a>
     <a href="#decisions">Decisions</a>
     <a href="#trip-desk">Trip desk</a>
     <a href="#packing">Packing</a>
@@ -765,19 +775,6 @@
       <div class="bd"><dt>Long days</dt><dd>2 of 7<span>Sun GTSR &middot; Tue Many Glacier</span></dd></div>
     </dl>
   </header>
-
-  <section id="days">
-    <div class="sec-head">
-      <h2>Seven days</h2>
-      <p>Each day carries its own map with numbered stops. Tap <b>Open in Google Maps</b> for live turn-by-turn with every stop as a waypoint. Times are targets.</p>
-    </div>
-    <div class="range-key">
-      <span><span class="dot home"></span><b>HOME</b> under 30 min out</span>
-      <span><span class="dot mid"></span><b>MID</b> 30&ndash;90 min</span>
-      <span><span class="dot far"></span><b>FAR</b> 2 hr+ each way</span>
-    </div>
-    <div class="days" id="days-list"></div>
-  </section>
 
   <section id="journal">
     <div class="sec-head">
@@ -914,6 +911,24 @@
         <div class="journal-foot">Airbnb checkout &middot; Whitefish frappes &middot; Flathead Lake + Harbor Grille &middot; Airport by 3:30 PM &middot; SLC connection + Boston red-eye</div>
       </article>
     </div>
+  </section>
+
+  <div class="trip-divider" role="separator" aria-label="Pre-trip planning archive">
+    <strong>Pre-trip planning archive</strong>
+    <p>The journal above is what happened. The itinerary, decisions, and packing notes below are the plan we started with.</p>
+  </div>
+
+  <section id="days">
+    <div class="sec-head">
+      <h2>Pre-trip itinerary</h2>
+      <p>The original plan, maps, and target timings &mdash; kept as the record of the trip before it happened.</p>
+    </div>
+    <div class="range-key">
+      <span><span class="dot home"></span><b>HOME</b> under 30 min out</span>
+      <span><span class="dot mid"></span><b>MID</b> 30&ndash;90 min</span>
+      <span><span class="dot far"></span><b>FAR</b> 2 hr+ each way</span>
+    </div>
+    <div class="days" id="days-list"></div>
   </section>
 
   <section id="decisions">
